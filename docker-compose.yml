@@ -1,0 +1,12 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  guildhubapi:
+    image: guild-hub-api
+    build:
+      context: .
+      dockerfile: src/GuildHub.Api/Dockerfile
+    ports:
+      - 5000:5000
