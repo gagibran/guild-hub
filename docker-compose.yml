@@ -1,12 +1,23 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
-
-version: '3.4'
-
 services:
-  guildhubapi:
-    image: guild-hub-api
+  database:
+      container_name: database
+      image: postgres:16
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=admin
+        - POSTGRES_PASSWORD=admin
+      volumes:
+        - postgresql:/var/lib/postgresql/data
+      ports:
+        - 5432:5432
+  application:
+    image: guild-hub:0.1.0
     build:
       context: .
       dockerfile: src/GuildHub.Api/Dockerfile
     ports:
       - 5000:5000
+    depends_on:
+      - database
+volumes:
+  postgresql:
