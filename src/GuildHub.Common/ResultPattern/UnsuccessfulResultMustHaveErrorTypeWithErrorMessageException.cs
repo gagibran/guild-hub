@@ -1,4 +1,4 @@
-namespace GuildHub.Api.Common.ResultPattern;
+namespace GuildHub.Common.ResultPattern;
 
 public sealed class UnsuccessfulResultMustHaveErrorTypeWithErrorMessageException : Exception
 {

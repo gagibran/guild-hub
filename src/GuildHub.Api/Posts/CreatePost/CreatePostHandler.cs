@@ -1,17 +1,21 @@
-using GuildHub.Api.Common.RequestHandler;
-using GuildHub.Api.Data;
-
 namespace GuildHub.Api.Posts.CreatePost;
 
-public sealed class CreatePostHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<CreatePostDto, PostCreatedDto>
+public sealed class CreatePostHandler(IApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher) : IRequestHandler<CreatePostDto, CreatedPostDto>
 {
     private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly IMapDispatcher _mapDispatcher = mapDispatcher;
 
-    public async Task<PostCreatedDto> HandleAsync(CreatePostDto createPostDto, CancellationToken cancellationToken)
+    public async Task<Result<CreatedPostDto>> HandleAsync(CreatePostDto createPostDto, CancellationToken cancellationToken)
     {
-        var post = new Post(createPostDto.Title, createPostDto.Content, createPostDto.ImagePath);
+        Result<Title> postTitleResult = Title.Build(createPostDto.Title);
+        if (!postTitleResult.IsSuccess)
+        {
+            return Result.Fail<CreatedPostDto>(postTitleResult);
+        }
+        var post = new Post(postTitleResult.Value!, createPostDto.Content, createPostDto.ImagePath);
         _applicationDbContext.Posts.Add(post);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
-        return new PostCreatedDto(createPostDto.Title, createPostDto.Content, createPostDto.ImagePath);
+        CreatedPostDto createdPostDto = _mapDispatcher.DispatchMapAsync<Post, CreatedPostDto>(post);
+        return Result.Success(createdPostDto);
     }
 }

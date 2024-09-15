@@ -1,5 +1,3 @@
-using GuildHub.Api.Common;
-
 namespace GuildHub.Api.PostReplies;
 
 public sealed class PostReply : Entity
@@ -17,7 +15,7 @@ public sealed class PostReply : Entity
 
     private PostReply()
     {
-        Post = new Post(string.Empty, null, null);
+        Post = null!;
         Message = string.Empty;
     }
 }

@@ -11,6 +11,7 @@ services:
       ports:
         - 5432:5432
   application:
+    container_name: application
     image: guild-hub:0.1.0
     build:
       context: .

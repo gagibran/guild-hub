@@ -1,6 +1,6 @@
-using GuildHub.Api.Common.DispatcherPattern;
 using GuildHub.Api.Posts.CreatePost;
-using Moq;
+using GuildHub.Common.RequestHandler;
+using Microsoft.AspNetCore.Http;
 
 namespace GuildHub.UnitTests.Posts;
 
@@ -10,15 +10,15 @@ public class CreatePostEndpointTests
     public async Task TestName()
     {
         // Arrange:
-        var dispatcherMock = new Mock<IDispatcher>();
+        var dispatcherMock = new Mock<IRequestDispatcher>();
         var expectedCreatePostDto = new CreatePostDto("Title", "Content", "ImagePath");
 
         // Act:
-        await CreatePostEndpoint.CreatePostAsync(dispatcherMock.Object, expectedCreatePostDto);
+        await CreatePostEndpoint.CreatePostAsync(dispatcherMock.Object, It.IsAny<HttpContext>(), expectedCreatePostDto, It.IsAny<CancellationToken>());
 
         // Assert:
         dispatcherMock.Verify(
-            dispatcher => dispatcher.DispatchAsync<CreatePostDto, PostCreatedDto>(expectedCreatePostDto, It.IsAny<CancellationToken>()),
+            dispatcher => dispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(expectedCreatePostDto, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }

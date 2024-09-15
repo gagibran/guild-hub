@@ -1,6 +1,6 @@
 namespace GuildHub.Api.Data.EntityBuilders;
 
-public class PostBuilder : IEntityTypeConfiguration<Post>
+public sealed class PostBuilder : IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<Post> postBuilder)
     {
@@ -8,7 +8,8 @@ public class PostBuilder : IEntityTypeConfiguration<Post>
             .ToTable("Posts")
             .HasKey(post => post.Id);
         postBuilder
-            .Property(post => post.Title)
+            .ComplexProperty(post => post.Title)
+            .Property(title => title.TitleName)
             .HasColumnName("Title")
             .IsRequired();
         postBuilder
@@ -17,6 +18,9 @@ public class PostBuilder : IEntityTypeConfiguration<Post>
         postBuilder
             .Property(post => post.ImagePath)
             .HasColumnName("ImagePath");
+        postBuilder
+            .HasMany(post => post.PostReplies)
+            .WithOne(postReply => postReply.Post);
         postBuilder
             .HasMany(post => post.PostReplies)
             .WithOne(postReply => postReply.Post)

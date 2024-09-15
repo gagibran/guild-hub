@@ -1,4 +1,4 @@
-namespace GuildHub.Api.Common;
+namespace GuildHub.Common;
 
 public abstract class Entity
 {

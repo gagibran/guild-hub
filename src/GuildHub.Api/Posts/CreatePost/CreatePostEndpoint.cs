@@ -1,13 +1,18 @@
-using GuildHub.Api.Common.DispatcherPattern;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace GuildHub.Api.Posts.CreatePost;
 
-public sealed class CreatePostEndpoint
+public static class CreatePostEndpoint
 {
-    public static async Task<Ok<PostCreatedDto>> CreatePostAsync(IDispatcher dispatcher, CreatePostDto createPostDto, CancellationToken cancellationToken = default)
+    public static async Task<Results<ProblemHttpResult, CreatedAtRoute<CreatedPostDto>>> CreatePostAsync(
+        IRequestDispatcher dispatcher,
+        HttpContext httpContext,
+        CreatePostDto createPostDto,
+        CancellationToken cancellationToken = default)
     {
-        PostCreatedDto postCreatedDto = await dispatcher.DispatchAsync<CreatePostDto, PostCreatedDto>(createPostDto, cancellationToken);
-        return TypedResults.Ok(postCreatedDto);
+        Result<CreatedPostDto> createdPostDtoResult = await dispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(createPostDto, cancellationToken);
+        if (!createdPostDtoResult.IsSuccess)
+        {
+            return ApiHelper.CreateProblemDetails(HttpStatusCode.UnprocessableEntity, createdPostDtoResult.Errors, httpContext);
+        }
+        return TypedResults.CreatedAtRoute(createdPostDtoResult.Value, nameof(GetPostByIdEndpoint.GetPostByIdAsync), new { createdPostDtoResult.Value!.Id });
     }
 }

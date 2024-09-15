@@ -1,12 +1,10 @@
-using GuildHub.Api.Common.RequestHandler;
+namespace GuildHub.Common.RequestHandler;
 
-namespace GuildHub.Api.Common.DispatcherPattern;
-
-public sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
+public sealed class RequestDispatcher(IServiceProvider serviceProvider) : IRequestDispatcher
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public async Task<TResponse> DispatchAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
+    public async Task<Result<TResponse>> DispatchRequestAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken)
         where TRequest : IRequest
         where TResponse : IResponse
     {

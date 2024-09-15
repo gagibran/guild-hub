@@ -1,8 +1,6 @@
-using GuildHub.Api.PostReplies;
-
 namespace GuildHub.Api.Data.EntityBuilders;
 
-public class PostReplyBuilder : IEntityTypeConfiguration<PostReply>
+public sealed class PostReplyBuilder : IEntityTypeConfiguration<PostReply>
 {
     public void Configure(EntityTypeBuilder<PostReply> postReplyBuilder)
     {
@@ -16,6 +14,9 @@ public class PostReplyBuilder : IEntityTypeConfiguration<PostReply>
         postReplyBuilder
             .Property(postReply => postReply.ImagePath)
             .HasColumnName("ImagePath");
+        postReplyBuilder
+            .HasOne(postReply => postReply.Post)
+            .WithMany(post => post.PostReplies);
         postReplyBuilder
             .Property(postReply => postReply.CreatedAtUtc)
             .HasColumnName("CreatedAt")
