@@ -3,7 +3,7 @@ using GuildHub.Common.RequestHandler;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace GuildHub.UnitTests.Posts.CreatePost;
+namespace GuildHub.UnitTests.Api.Posts.CreatePost;
 
 public class CreatePostEndpointTests
 {

@@ -1,7 +1,4 @@
-using GuildHub.Api.Posts;
-using GuildHub.Api.Posts.ValueObjects;
-
-namespace GuildHub.UnitTests.Posts.ValueObjects;
+namespace GuildHub.UnitTests.Api.Posts.ValueObjects;
 
 public class TitleTests
 {

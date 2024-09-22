@@ -1,4 +1,4 @@
-namespace GuildHub.UnitTests.Posts.CreatePost;
+namespace GuildHub.UnitTests.Api.Posts.CreatePost;
 
 public class CreatePostHandlerTests
 {

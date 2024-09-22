@@ -1,4 +1,4 @@
-namespace GuildHub.UnitTests.Posts.GetPostById;
+namespace GuildHub.UnitTests.Api.Posts.GetPostById;
 
 public class GetPostByIdHandlerTests
 {
