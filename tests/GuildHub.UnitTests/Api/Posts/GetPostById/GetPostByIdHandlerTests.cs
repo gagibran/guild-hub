@@ -41,7 +41,11 @@ public class GetPostByIdHandlerTests
     public async Task HandleAsync_WhenRetrievedPostIsNotNull_ShouldReturnSuccessWithDto()
     {
         // Arrange:
-        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto("Title", "Content", "ImagePath", []);
+        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
+            "Title",
+            "Content",
+            "ImagePath",
+            [new("Message", "ImagePath"), new("Message2", "ImagePath2")]);
         Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result.Success(expectedRetrievedPostByIdDto);
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<object[]>(), It.IsAny<CancellationToken>()))
