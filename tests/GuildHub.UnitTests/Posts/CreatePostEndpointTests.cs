@@ -1,6 +1,6 @@
 using GuildHub.Api.Posts.CreatePost;
 using GuildHub.Common.RequestHandler;
-using GuildHub.Common.ResultPattern;
+using GuildHub.Common.ResultHandler;
 using Microsoft.AspNetCore.Http;
 
 namespace GuildHub.UnitTests.Posts;

@@ -1,4 +1,4 @@
-namespace GuildHub.Common.ResultPattern;
+namespace GuildHub.Common.ResultHandler;
 
 public partial class Result
 {

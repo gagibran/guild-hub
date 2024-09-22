@@ -1,7 +1,7 @@
 using FluentAssertions;
 using GuildHub.Api.Posts;
 using GuildHub.Api.Posts.ValueObjects;
-using GuildHub.Common.ResultPattern;
+using GuildHub.Common.ResultHandler;
 
 namespace GuildHub.UnitTests.Common.ValueObjects;
 
