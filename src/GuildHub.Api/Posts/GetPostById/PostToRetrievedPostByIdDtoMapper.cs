@@ -6,7 +6,7 @@ public sealed class PostToRetrievedPostByIdDtoMapper(IMapDispatcher mapDispatche
 
     public RetrievedPostByIdDto Map(Post post)
     {
-        List<RetrievedPostReplyForPostDto> retrievedPostRepliesForPostDto = _mapDispatcher.DispatchMapAsync<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies);
+        List<RetrievedPostReplyForPostDto> retrievedPostRepliesForPostDto = _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies);
         return new RetrievedPostByIdDto(post.Title.ToString(), post.Content, post.ImagePath, retrievedPostRepliesForPostDto);
     }
 }

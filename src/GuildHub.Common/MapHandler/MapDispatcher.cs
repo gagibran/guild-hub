@@ -4,7 +4,7 @@ public sealed class MapDispatcher(IServiceProvider serviceProvider) : IMapDispat
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public TOutput DispatchMapAsync<TInput, TOutput>(TInput input)
+    public TOutput DispatchMap<TInput, TOutput>(TInput input)
         where TInput : class
         where TOutput : class
     {

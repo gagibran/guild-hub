@@ -13,9 +13,9 @@ public sealed class CreatePostHandler(IApplicationDbContext applicationDbContext
             return Result.Fail<CreatedPostDto>(postTitleResult);
         }
         var post = new Post(postTitleResult.Value!, createPostDto.Content, createPostDto.ImagePath);
-        _applicationDbContext.Posts.Add(post);
+        await _applicationDbContext.Posts.AddAsync(post, cancellationToken);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
-        CreatedPostDto createdPostDto = _mapDispatcher.DispatchMapAsync<Post, CreatedPostDto>(post);
+        CreatedPostDto createdPostDto = _mapDispatcher.DispatchMap<Post, CreatedPostDto>(post);
         return Result.Success(createdPostDto);
     }
 }
