@@ -17,7 +17,7 @@ public partial class Result
 
     protected Result(bool isSuccess, List<string> errors)
     {
-        if (!isSuccess && errors.Any(string.IsNullOrWhiteSpace))
+        if (!isSuccess && (errors is null || errors.Count is 0 || errors.Any(string.IsNullOrWhiteSpace)))
         {
             throw new UnsuccessfulResultMustHaveErrorTypeWithErrorMessageException();
         }
@@ -38,15 +38,6 @@ public partial class Result
     public static Result Fail(List<string> errors)
     {
         return new Result(false, errors);
-    }
-
-    public static Result Fail(Result failedResult)
-    {
-        if (failedResult.IsSuccess)
-        {
-            throw new ConvertSuccessfulResultToFailedException();
-        }
-        return new Result(false, failedResult.Errors);
     }
 
     public static Result<TValue> Success<TValue>(TValue value)
