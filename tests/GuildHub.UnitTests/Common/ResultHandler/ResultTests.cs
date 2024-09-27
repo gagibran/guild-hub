@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Common.ResultHandler;
 
-public class ResultTests
+public sealed class ResultTests
 {
     [Theory]
     [InlineData("")]
