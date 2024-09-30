@@ -10,7 +10,7 @@ namespace GuildHub.IntegrationTests;
 
 public sealed class IntegrationTestsWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-private readonly PostgreSqlContainer _postgreSqlContainer;
+    private readonly PostgreSqlContainer _postgreSqlContainer;
 
     public IntegrationTestsWebApplicationFactory()
     {
@@ -22,9 +22,12 @@ private readonly PostgreSqlContainer _postgreSqlContainer;
             .Build();
     }
 
-    public async Task InitializeAsync()
+    async Task IAsyncLifetime.InitializeAsync()
     {
         await _postgreSqlContainer.StartAsync();
+        using IServiceScope serviceScope = Services.CreateScope();
+        var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder webHostBuilder)
