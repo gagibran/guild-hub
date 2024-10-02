@@ -1,2 +1,11 @@
 global using System.Text.Json;
 global using System.Net.Mime;
+global using System.Net;
+global using System.Net.Http.Json;
+global using System.Text;
+global using FluentAssertions;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Http.HttpResults;
+global using Microsoft.AspNetCore.Mvc;
+global using GuildHub.Api.Posts.GetPostById;
+global using GuildHub.Api.Posts.CreatePost;

@@ -1,23 +1,18 @@
-namespace GuildHub.IntegrationTests.Api.Posts.CreatePost;
+namespace GuildHub.IntegrationTests.Api.Posts.GetPostById;
 
-public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
+public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
     : IntegrationTest(integrationTestsWebApplicationFactory)
 {
     [Fact]
-    public async Task CreatePostAsync_WhenTitleIsNullOrWhiteSpace_ShouldReturnProblemHttpResult()
+    public async Task GetPostByIdAsync_WhenPostDoesNotExist_ShouldReturnProblemHttpResult()
     {
         // Arrange:
+        Guid postId = Guid.NewGuid();
         ProblemHttpResult expectedProblemHttpResult = TypedResults.Problem(
             title: "One or more validation errors occurred.",
-            statusCode: (int)HttpStatusCode.UnprocessableEntity);
-        var expectedErrors = new List<string> { "The post title cannot be empty." };
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
-        {
-            Content = new StringContent(
-                "{\"title\": \"\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
-                Encoding.UTF8,
-                MediaTypeNames.Application.Json)
-        };
+            statusCode: (int)HttpStatusCode.NotFound);
+        var expectedErrors = new List<string> { $"No post with the ID '{postId}' was found." };
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}/{postId}");
 
         // Act:
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
@@ -35,20 +30,17 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
     }
 
     [Fact]
-    public async Task CreatePostAsync_WhenTitleIsValid_ShouldCreatePost()
+    public async Task GetPostByIdAsync_WhenPostExists_ShouldReturnPost()
     {
         // Arrange:
         const string ExpectedTitle = "Title";
         const string ExpectedContent = "Content";
         const string ExpectedImagePath = "ImagePath";
+        Guid postId = (await CreateAsync<CreatedPostDto>(
+            $"{{\"title\": \"{ExpectedTitle}\", \"content\": \"{ExpectedContent}\", \"imagePath\": \"{ExpectedImagePath}\"}}",
+            Constants.BasePostEndpoint)).Id;
         var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, []);
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
-        {
-            Content = new StringContent(
-                $"{{\"title\": \"{ExpectedTitle}\", \"content\": \"{ExpectedContent}\", \"imagePath\": \"{ExpectedImagePath}\"}}",
-                Encoding.UTF8,
-                MediaTypeNames.Application.Json)
-        };
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}/{postId}");
 
         // Act:
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
@@ -56,8 +48,7 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
         // Assert:
         httpResponseMessage.EnsureSuccessStatusCode();
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        Guid actualCreatedPostId = JsonSerializer.Deserialize<CreatedPostDto>(responseContent, JsonSerializerOptions)!.Id;
-        RetrievedPostByIdDto actualRetrievedPostByIdDto = await GetAsync<RetrievedPostByIdDto>($"{Constants.BasePostEndpoint}/{actualCreatedPostId}");
+        RetrievedPostByIdDto? actualRetrievedPostByIdDto = JsonSerializer.Deserialize<RetrievedPostByIdDto>(responseContent, JsonSerializerOptions);
         actualRetrievedPostByIdDto.Should().BeEquivalentTo(expectedRetrievedPostByIdDto);
     }
 }

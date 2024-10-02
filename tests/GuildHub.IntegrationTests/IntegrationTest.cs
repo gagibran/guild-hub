@@ -18,4 +18,13 @@ public abstract class IntegrationTest(IntegrationTestsWebApplicationFactory inte
         string content = await httpResponseMessage.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<TReturn>(content, JsonSerializerOptions)!;
     }
+
+    protected async Task<TReturn> CreateAsync<TReturn>(string content, string uri)
+        where TReturn : class
+    {
+        var stringContent = new StringContent(content, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var httpResponseMessage = await HttpClient.PostAsync(uri, stringContent);
+        string entity = await httpResponseMessage.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<TReturn>(entity, JsonSerializerOptions)!;
+    }
 }
