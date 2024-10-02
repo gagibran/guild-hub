@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Api.Posts.GetPostById;
 
-public class GetPostByIdHandlerTests
+public sealed class GetPostByIdHandlerTests
 {
     private readonly Mock<IApplicationDbContext> _applicationDbContextMock;
     private readonly Mock<DbSet<Post>> _postDbSetMock;

@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Api.Posts.CreatePost;
 
-public class CreatePostHandlerTests
+public sealed class CreatePostHandlerTests
 {
     private readonly Mock<IApplicationDbContext> _applicationDbContextMock;
     private readonly Mock<IMapDispatcher> _mapDispatcherMock;

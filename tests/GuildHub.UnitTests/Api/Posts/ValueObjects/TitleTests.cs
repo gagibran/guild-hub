@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Api.Posts.ValueObjects;
 
-public class TitleTests
+public sealed class TitleTests
 {
     [Theory]
     [InlineData("")]

@@ -1,21 +1,16 @@
-using System.Net;
-using GuildHub.Common.RequestHandler;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace GuildHub.UnitTests.Api.Posts.CreatePost;
 
-public class CreatePostEndpointTests
+public sealed class CreatePostEndpointTests
 {
-    private readonly Mock<IRequestDispatcher> _dispatcherMock;
+    private readonly Mock<IRequestDispatcher> _requestDispatcherMock;
 
     public CreatePostEndpointTests()
     {
-        _dispatcherMock = new();
+        _requestDispatcherMock = new();
     }
 
     [Fact]
-    public async Task CreatePostAsync_WhenDispatcherReturnsFailedResult_ShouldReturnProblemHttpResultWithError()
+    public async Task CreatePostAsync_WhenRequestDispatcherReturnsFailedResult_ShouldReturnProblemHttpResultWithError()
     {
         // Arrange:
         const string ExpectedTracerIdentifier = "Identifier";
@@ -32,13 +27,13 @@ public class CreatePostEndpointTests
                 { "errors", new List<string> { ExpectedErrorMessage } },
                 { "traceId", ExpectedTracerIdentifier }
             });
-        _dispatcherMock
-            .Setup(dispatcher => dispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(It.IsAny<CreatePostDto>(), It.IsAny<CancellationToken>()))
+        _requestDispatcherMock
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(It.IsAny<CreatePostDto>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Fail<CreatedPostDto>(ExpectedErrorMessage));
 
         // Act:
         Results<ProblemHttpResult, CreatedAtRoute<CreatedPostDto>> actualResult = await CreatePostEndpoint.CreatePostAsync(
-            _dispatcherMock.Object,
+            _requestDispatcherMock.Object,
             defaultHttpContext,
             It.IsAny<CreatePostDto>(),
             It.IsAny<CancellationToken>());
@@ -48,21 +43,21 @@ public class CreatePostEndpointTests
     }
 
     [Fact]
-    public async Task CreatePostAsync_WhenDispatcherReturnsSuccessfulResult_ShouldReturnProblemHttpResultWithError()
+    public async Task CreatePostAsync_WhenRequestDispatcherReturnsSuccessfulResult_ShouldReturnCreatedAtRouteWithData()
     {
         // Arrange:
         var expectedCreatedPostDto = new CreatedPostDto(Guid.NewGuid(), "Title", "Content", "ImagePath");
-        var expectedCreatedAtRoute = TypedResults.CreatedAtRoute(
+        CreatedAtRoute<CreatedPostDto> expectedCreatedAtRoute = TypedResults.CreatedAtRoute(
             expectedCreatedPostDto,
             nameof(GetPostByIdEndpoint.GetPostByIdAsync),
             new { expectedCreatedPostDto.Id });
-        _dispatcherMock
-            .Setup(dispatcher => dispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(It.IsAny<CreatePostDto>(), It.IsAny<CancellationToken>()))
+        _requestDispatcherMock
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(It.IsAny<CreatePostDto>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(expectedCreatedPostDto));
 
         // Act:
         Results<ProblemHttpResult, CreatedAtRoute<CreatedPostDto>> actualResult = await CreatePostEndpoint.CreatePostAsync(
-            _dispatcherMock.Object,
+            _requestDispatcherMock.Object,
             It.IsAny<HttpContext>(),
             It.IsAny<CreatePostDto>(),
             It.IsAny<CancellationToken>());

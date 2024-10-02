@@ -8,3 +8,7 @@ global using GuildHub.Api.Data;
 global using GuildHub.Api.Posts.GetPostById;
 global using GuildHub.Api.Posts;
 global using GuildHub.Api.Posts.ValueObjects;
+global using System.Net;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Http.HttpResults;
+global using GuildHub.Common.RequestHandler;
