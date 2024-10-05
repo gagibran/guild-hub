@@ -9,11 +9,11 @@ public static class DependencyInjection
     {
         serviceCollection.AddTransient<IRequestHandler<CreatePostDto, CreatedPostDto>, CreatePostHandler>();
         serviceCollection.AddTransient<IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>, GetPostByIdHandler>();
-        serviceCollection.AddTransient<IRequestHandler<RetrievedPostsDto>, GetPostsHandler>();
+        serviceCollection.AddTransient<IRequestHandler<GetPostsDto, RetrievedPostsDto>, GetPostsHandler>();
         serviceCollection.AddTransient<IMapHandler<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>, PostRepliesToRetrievedPostRepliesForPostDtoMapper>();
         serviceCollection.AddTransient<IMapHandler<Post, RetrievedPostByIdDto>, PostToRetrievedPostByIdDtoMapper>();
         serviceCollection.AddTransient<IMapHandler<Post, CreatedPostDto>, PostToCreatedPostDtoMapper>();
-        serviceCollection.AddTransient<IMapHandler<List<Post>, RetrievedPostsDto>, PostsToRetrievedPostsDtoMapper>();
+        serviceCollection.AddTransient<IMapHandler<PagedList<Post>, RetrievedPostsDto>, PagedPostsToRetrievedPostsDtoMapper>();
         return serviceCollection;
     }
 
