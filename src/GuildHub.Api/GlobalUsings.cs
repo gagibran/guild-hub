@@ -11,4 +11,3 @@ global using GuildHub.Api.Posts.GetPostById;
 global using GuildHub.Api.PostReplies;
 global using GuildHub.Common.MapHandler;
 global using System.Net;
-global using System.Text.Json.Serialization;
