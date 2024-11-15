@@ -6,10 +6,10 @@ public sealed class TitleTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Build_WhenTitleIsEmpty_ShouldReturnFailureWithErrorMessage(string title)
+    public void Build_WhenTitleIsEmpty_ShouldReturnFailureWithErrorMessage(string? title)
     {
         // Act:
-        Result<Title> actualTitleResult = Title.Build(title);
+        Result<Title> actualTitleResult = Title.Build(title!);
 
         // Assert:
         actualTitleResult.Should().BeEquivalentTo(Result.Fail("The post title cannot be empty."));

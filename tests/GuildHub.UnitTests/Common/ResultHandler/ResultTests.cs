@@ -7,10 +7,10 @@ public sealed class ResultTests
     [InlineData("     ")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Fail_WhenErrorIsNullOrWhiteSpace_ShouldThrowUnsuccessfulResultMustHaveErrorTypeWithErrorMessageException(string error)
+    public void Fail_WhenErrorIsNullOrWhiteSpace_ShouldThrowUnsuccessfulResultMustHaveErrorTypeWithErrorMessageException(string? error)
     {
         // Arrange:
-        Func<Result> act = () => Result.Fail(error);
+        Func<Result> act = () => Result.Fail(error!);
 
         // Act & Assert:
         act
@@ -50,7 +50,7 @@ public sealed class ResultTests
     [InlineData("     ")]
     [InlineData(" ")]
     [InlineData(null)]
-    public void Fail_WhenErrorsContainsNullOrWhiteSpaceStrings_ShouldThrowUnsuccessfulResultMustHaveErrorTypeWithErrorMessageException(string error)
+    public void Fail_WhenErrorsContainsNullOrWhiteSpaceStrings_ShouldThrowUnsuccessfulResultMustHaveErrorTypeWithErrorMessageException(string? error)
     {
         // Arrange:
         Func<Result> act = () => Result.Fail(["Error", error, "Error2"]);
