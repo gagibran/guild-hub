@@ -9,16 +9,16 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
     public RetrievedPostsDto Map(PagedList<Post> pagedPosts)
     {
         return new RetrievedPostsDto(
-            pagedPosts.Entities
+            pagedPosts.EntitiesInPage
                 .Select(post => new RetrievedPostByIdDto(
                     post.Title.ToString(),
                     post.Content,
                     post.ImagePath,
                     _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies)))
                 .ToList(),
-            pagedPosts.CurrentPage,
-            pagedPosts.PageSize,
-            pagedPosts.TotalAmountOfEntities,
-            pagedPosts.TotalNumberOfPages);
+            pagedPosts.CurrentPageIndex,
+            pagedPosts.EntitiesPerPage,
+            pagedPosts.EntitiesCount,
+            pagedPosts.PagesCount);
     }
 }

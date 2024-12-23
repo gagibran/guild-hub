@@ -8,10 +8,10 @@ public sealed class GetPostsHandler(IApplicationDbContext applicationDbContext, 
 
     public async Task<Result<RetrievedPostsDto>> HandleAsync(GetPostsDto getPostsDto, CancellationToken cancellationToken)
     {
-        PagedList<Post> pagedPosts = await PagedList<Post>.CreatePagedListAsync(
+        PagedList<Post> pagedPosts = await PagedList<Post>.BuildAsync(
             _applicationDbContext.Posts,
-            getPostsDto.CurrentPage,
-            getPostsDto.PageSize,
+            getPostsDto.CurrentPageIndex,
+            getPostsDto.PostsPerPage,
             cancellationToken);
         RetrievedPostsDto retrievedPostByIdDtos = _mapDispatcher.DispatchMap<PagedList<Post>, RetrievedPostsDto>(pagedPosts);
         return Result.Success(retrievedPostByIdDtos);

@@ -4,41 +4,41 @@ namespace GuildHub.Common.Pagination;
 
 public sealed class PagedList<TEntity> where TEntity : Entity
 {
-    public List<TEntity> Entities { get; }
-    public int CurrentPage { get; }
-    public int PageSize { get; }
-    public int TotalAmountOfEntities { get; }
-    public int TotalNumberOfPages { get; }
+    public List<TEntity> EntitiesInPage { get; }
+    public int CurrentPageIndex { get; }
+    public int EntitiesPerPage { get; }
+    public int EntitiesCount { get; }
+    public int PagesCount { get; }
 
-    private PagedList(List<TEntity> entities, int currentPage, int pageSize, int totalAmountOfEntities, int totalNumberOfPages)
+    private PagedList(List<TEntity> entitiesInPage, int currentPageIndex, int entitiesPerPage, int entitiesCount, int pagesCount)
     {
-        Entities = entities;
-        CurrentPage = currentPage;
-        PageSize = pageSize;
-        TotalAmountOfEntities = totalAmountOfEntities;
-        TotalNumberOfPages = totalNumberOfPages;
+        EntitiesInPage = entitiesInPage;
+        CurrentPageIndex = currentPageIndex;
+        EntitiesPerPage = entitiesPerPage;
+        EntitiesCount = entitiesCount;
+        PagesCount = pagesCount;
     }
 
-    public static async Task<PagedList<TEntity>> CreatePagedListAsync(
+    public static async Task<PagedList<TEntity>> BuildAsync(
         IQueryable<TEntity> entities,
-        int? currentPage,
-        int? pageSize,
+        int? currentPageIndex,
+        int? entitiesPerPage,
         CancellationToken cancellationToken)
     {
-        var totalAmountOfEntities = await entities.CountAsync(cancellationToken);
-        int actualCurrentPage = currentPage is null || currentPage <= 1 ? 1 : currentPage.Value;
-        int actualPageSize = pageSize is null || pageSize > 50 ? 50 : pageSize.Value;
-        actualPageSize = actualPageSize <= 0 ? 1 : actualPageSize;
-        int totalNumberOfPages = (int)Math.Ceiling(totalAmountOfEntities / (double)actualPageSize);
-        actualCurrentPage = actualCurrentPage > totalNumberOfPages ? totalNumberOfPages : actualCurrentPage;
+        int entitiesCount = await entities.CountAsync(cancellationToken);
+        int validatedEntitiesPerPage = entitiesPerPage is null || entitiesPerPage > 50 ? 50 : entitiesPerPage.Value;
+        validatedEntitiesPerPage = validatedEntitiesPerPage <= 0 ? 1 : validatedEntitiesPerPage;
+        int pagesCount = (int)Math.Ceiling(entitiesCount / (double)validatedEntitiesPerPage);
+        int validatedCurrentPageIndex = currentPageIndex is null || currentPageIndex <= 1 ? 1 : currentPageIndex.Value;
+        validatedCurrentPageIndex = validatedCurrentPageIndex > pagesCount ? pagesCount : validatedCurrentPageIndex;
         var entitiesInPage = new List<TEntity>();
-        if (totalAmountOfEntities > 0)
+        if (entitiesCount > 0)
         {
             entitiesInPage = await entities
-                .Skip((actualCurrentPage - 1) * actualPageSize)
-                .Take(actualPageSize)
+                .Skip((validatedCurrentPageIndex - 1) * validatedEntitiesPerPage)
+                .Take(validatedEntitiesPerPage)
                 .ToListAsync(cancellationToken);
         }
-        return new PagedList<TEntity>(entitiesInPage, actualCurrentPage, actualPageSize, totalAmountOfEntities, totalNumberOfPages);
+        return new PagedList<TEntity>(entitiesInPage, validatedCurrentPageIndex, validatedEntitiesPerPage, entitiesCount, pagesCount);
     }
 }

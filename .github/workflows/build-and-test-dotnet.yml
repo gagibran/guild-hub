@@ -6,17 +6,17 @@ on:
 
 jobs:
   dotnet_build_and_test:
-    name: Build And Test .NET 8 Projects
+    name: Build And Test .NET 9 Projects
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout To Branch
       uses: actions/checkout@v4
 
-    - name: Setup .NET 8.0.x
+    - name: Setup .NET 9.0.x
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
 
     - name: Restore .NET Dependencies
       run: dotnet restore
