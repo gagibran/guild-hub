@@ -12,3 +12,4 @@ global using System.Net;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using GuildHub.Common.RequestHandler;
+global using GuildHub.Api.Posts.DeletePostById;
