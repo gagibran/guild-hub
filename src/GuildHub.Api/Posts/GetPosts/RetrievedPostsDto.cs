@@ -1,7 +1,7 @@
 namespace GuildHub.Api.Posts.GetPosts;
 
 public sealed record RetrievedPostsDto(
-    List<RetrievedPostByIdDto> Replies,
+    List<RetrievedPostByIdDto> Posts,
     int? CurrentPageIndex,
     int? PostsPerPage,
     int PostsCount,

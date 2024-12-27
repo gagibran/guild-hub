@@ -1,3 +1,5 @@
+using NpgsqlTypes;
+
 namespace GuildHub.Api.Posts;
 
 public sealed class Post : Entity
@@ -8,12 +10,14 @@ public sealed class Post : Entity
     public string? Content { get; }
     public string? ImagePath { get; }
     public ICollection<PostReply> PostReplies { get { return _postReplies; } }
+    public NpgsqlTsVector SearchTsVector { get; }
 
     public Post(Title title, string? content, string? imagePath)
     {
         Title = title;
         Content = content;
         ImagePath = imagePath;
+        SearchTsVector = null!;
         _postReplies = [];
     }
 
@@ -22,6 +26,7 @@ public sealed class Post : Entity
         Title = null!;
         Content = null;
         ImagePath = null;
+        SearchTsVector = null!;
         _postReplies = [];
     }
 

@@ -1,3 +1,3 @@
 namespace GuildHub.Api.Posts.GetPosts;
 
-public sealed record GetPostsDto(int? CurrentPageIndex, int? PostsPerPage) : IRequest;
+public sealed record GetPostsDto(string? Query, int? CurrentPageIndex, int? PostsPerPage, string SortBy) : IRequest;

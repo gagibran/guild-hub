@@ -7,14 +7,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 
 #nullable disable
 
 namespace GuildHub.Api.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241221170623_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20241226184607_AddedApplicationModels")]
+    partial class AddedApplicationModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +78,12 @@ namespace GuildHub.Api.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("ImagePath");
 
+                    b.Property<NpgsqlTsVector>("SearchTsVector")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComputedColumnSql("to_tsvector('english', coalesce(\"Title\", '') || ' ' || coalesce(\"Content\", ''))", true);
+
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("UpdatedAt");
@@ -92,6 +99,10 @@ namespace GuildHub.Api.Data.Migrations
                         });
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SearchTsVector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchTsVector"), "GIN");
 
                     b.ToTable("Posts", (string)null);
                 });
