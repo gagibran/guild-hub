@@ -11,6 +11,7 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
         return new RetrievedPostsDto(
             pagedPosts.EntitiesInPage
                 .Select(post => new RetrievedPostByIdDto(
+                    post.Id,
                     post.Title.ToString(),
                     post.Content,
                     post.ImagePath,

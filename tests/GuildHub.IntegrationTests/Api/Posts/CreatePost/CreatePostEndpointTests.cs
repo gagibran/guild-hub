@@ -41,7 +41,13 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
         const string ExpectedTitle = "Title";
         const string ExpectedContent = "Content";
         const string ExpectedImagePath = "ImagePath";
-        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, [], It.IsAny<DateTime>());
+        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
+            It.IsAny<Guid>(),
+            ExpectedTitle,
+            ExpectedContent,
+            ExpectedImagePath,
+            [],
+            It.IsAny<DateTime>());
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
         {
             Content = new StringContent(
@@ -62,6 +68,8 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
             .Should()
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDto,
-                options => options.Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt));
+                options => options
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
     }
 }

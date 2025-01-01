@@ -43,6 +43,7 @@ public sealed class GetPostByIdHandlerTests
     {
         // Arrange:
         var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
+            Guid.NewGuid(),
             "Title",
             "Content",
             "ImagePath",
@@ -58,7 +59,7 @@ public sealed class GetPostByIdHandlerTests
 
         // Act:
         Result<RetrievedPostByIdDto> actualRetrievedPostByIdDtoResult = await _getPostByIdHandler.HandleAsync(
-            new(Guid.NewGuid()),
+            new(It.IsAny<Guid>()),
             It.IsAny<CancellationToken>());
 
         // Assert:

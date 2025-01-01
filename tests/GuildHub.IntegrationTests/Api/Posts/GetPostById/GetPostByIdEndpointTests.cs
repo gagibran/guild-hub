@@ -39,7 +39,13 @@ public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFacto
         Guid postId = (await CreateAsync<CreatedPostDto>(
             $"{{\"title\": \"{ExpectedTitle}\", \"content\": \"{ExpectedContent}\", \"imagePath\": \"{ExpectedImagePath}\"}}",
             Constants.BasePostEndpoint)).Id;
-        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, [], new DateTime(2022, 1, 1));
+        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
+            It.IsAny<Guid>(),
+            ExpectedTitle,
+            ExpectedContent,
+            ExpectedImagePath,
+            [],
+            It.IsAny<DateTime>());
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}/{postId}");
 
         // Act:
@@ -53,5 +59,8 @@ public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFacto
             .Should()
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDto,
-                options => options.Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt));    }
+                options => options
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
+    }
 }

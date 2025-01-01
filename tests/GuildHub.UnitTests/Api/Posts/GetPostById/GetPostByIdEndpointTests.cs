@@ -47,6 +47,7 @@ public sealed class GetPostByIdEndpointTests
     {
         // Arrange:
         var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
+            Guid.NewGuid(),
             "Title",
             "Content",
             "ImagePath",

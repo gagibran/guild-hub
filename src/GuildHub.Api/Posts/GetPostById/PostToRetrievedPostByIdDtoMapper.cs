@@ -8,6 +8,7 @@ public sealed class PostToRetrievedPostByIdDtoMapper(IMapDispatcher mapDispatche
     {
         List<RetrievedPostReplyForPostDto> retrievedPostRepliesForPostDto = _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies);
         return new RetrievedPostByIdDto(
+            post.Id,
             post.Title.ToString(),
             post.Content,
             post.ImagePath,

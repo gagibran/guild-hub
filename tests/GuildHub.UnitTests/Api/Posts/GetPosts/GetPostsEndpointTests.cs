@@ -55,6 +55,7 @@ public class GetPostsEndpointTests
         var retrievedPosts = new List<RetrievedPostByIdDto>
         {
             new(
+                Guid.NewGuid(),
                 "Title",
                 "Content",
                 "ImagePath",
@@ -64,6 +65,7 @@ public class GetPostsEndpointTests
                 ],
                 new DateTime(2022, 2, 3)),
             new(
+                Guid.NewGuid(),
                 "Title2",
                 "Content2",
                 "ImagePath2",
@@ -73,6 +75,7 @@ public class GetPostsEndpointTests
                 ],
                 new DateTime(2021, 2, 3)),
             new(
+                Guid.NewGuid(),
                 "Title3",
                 "Content3",
                 "ImagePath3",
