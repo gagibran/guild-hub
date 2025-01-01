@@ -41,7 +41,7 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
         const string ExpectedTitle = "Title";
         const string ExpectedContent = "Content";
         const string ExpectedImagePath = "ImagePath";
-        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, []);
+        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, [], It.IsAny<DateTime>());
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
         {
             Content = new StringContent(
@@ -58,6 +58,10 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
         Guid actualCreatedPostId = JsonSerializer.Deserialize<CreatedPostDto>(responseContent, JsonSerializerOptions)!.Id;
         RetrievedPostByIdDto actualRetrievedPostByIdDto = await GetAsync<RetrievedPostByIdDto>($"{Constants.BasePostEndpoint}/{actualCreatedPostId}");
-        actualRetrievedPostByIdDto.Should().BeEquivalentTo(expectedRetrievedPostByIdDto);
+        actualRetrievedPostByIdDto
+            .Should()
+            .BeEquivalentTo(
+                expectedRetrievedPostByIdDto,
+                options => options.Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt));
     }
 }

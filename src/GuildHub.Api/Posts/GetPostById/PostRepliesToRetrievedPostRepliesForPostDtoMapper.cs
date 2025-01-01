@@ -7,7 +7,10 @@ public sealed class PostRepliesToRetrievedPostRepliesForPostDtoMapper : IMapHand
         var retrievedPostRepliesForPostDto = new List<RetrievedPostReplyForPostDto>();
         foreach (PostReply postReply in postReplies)
         {
-            retrievedPostRepliesForPostDto.Add(new RetrievedPostReplyForPostDto(postReply.Message, postReply.ImagePath));
+            retrievedPostRepliesForPostDto.Add(new RetrievedPostReplyForPostDto(
+                postReply.Message,
+                postReply.ImagePath,
+                postReply.CreatedAtUtc));
         }
         return retrievedPostRepliesForPostDto;
     }

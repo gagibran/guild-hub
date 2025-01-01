@@ -3,6 +3,7 @@ global using System.Net.Mime;
 global using System.Net;
 global using System.Net.Http.Json;
 global using System.Text;
+global using Moq;
 global using FluentAssertions;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Http.HttpResults;

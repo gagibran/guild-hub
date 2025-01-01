@@ -23,7 +23,8 @@ public sealed class GetPostByIdHandlerTests
     {
         // Arrange:
         var getPostByIdDto = new GetPostByIdDto(Guid.NewGuid());
-        Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result.Fail<RetrievedPostByIdDto>($"No post with the ID '{getPostByIdDto.Id}' was found.");
+        Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result.Fail<RetrievedPostByIdDto>(
+            $"No post with the ID '{getPostByIdDto.Id}' was found.");
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<object[]>(), It.IsAny<CancellationToken>()))
             .Returns(new ValueTask<Post?>());
@@ -45,7 +46,8 @@ public sealed class GetPostByIdHandlerTests
             "Title",
             "Content",
             "ImagePath",
-            [new("Message", "ImagePath"), new("Message2", "ImagePath2")]);
+            [new("Message", "ImagePath", new DateTime(2020, 1, 2)), new("Message2", "ImagePath2", new DateTime(2020, 1, 2))],
+            new DateTime(2020, 1, 1));
         Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result.Success(expectedRetrievedPostByIdDto);
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<object[]>(), It.IsAny<CancellationToken>()))

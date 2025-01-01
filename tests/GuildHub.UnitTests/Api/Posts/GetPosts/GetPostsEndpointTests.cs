@@ -59,25 +59,28 @@ public class GetPostsEndpointTests
                 "Content",
                 "ImagePath",
                 [
-                    new("Message", "ImagePath"),
-                    new("Message2", "ImagePath2")
-                ]),
+                    new("Message", "ImagePath", new DateTime(2023, 2, 3)),
+                    new("Message2", "ImagePath2", new DateTime(2024, 2, 3))
+                ],
+                new DateTime(2022, 2, 3)),
             new(
                 "Title2",
                 "Content2",
                 "ImagePath2",
                 [
-                    new("Message3", "ImagePath3"),
-                    new("Message4", "ImagePath4")
-                ]),
+                    new("Message3", "ImagePath3", new DateTime(2024, 2, 3)),
+                    new("Message4", "ImagePath4", new DateTime(2024, 10, 3))
+                ],
+                new DateTime(2021, 2, 3)),
             new(
                 "Title3",
                 "Content3",
                 "ImagePath3",
                 [
-                    new("Message5", "ImagePath5"),
-                    new("Message6", "ImagePath6")
-                ])
+                    new("Message5", "ImagePath5", new DateTime(2022, 8, 24)),
+                    new("Message6", "ImagePath6", new DateTime(2022, 11, 2))
+                ],
+                new DateTime(2021, 2, 3))
         };
         int expectedEntitiesCount = retrievedPosts.Count;
         int expectedPagesCount = (int)Math.Ceiling(expectedEntitiesCount / (double)ExpectedEntitiesPerPage);

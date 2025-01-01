@@ -39,7 +39,7 @@ public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFacto
         Guid postId = (await CreateAsync<CreatedPostDto>(
             $"{{\"title\": \"{ExpectedTitle}\", \"content\": \"{ExpectedContent}\", \"imagePath\": \"{ExpectedImagePath}\"}}",
             Constants.BasePostEndpoint)).Id;
-        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, []);
+        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(ExpectedTitle, ExpectedContent, ExpectedImagePath, [], new DateTime(2022, 1, 1));
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}/{postId}");
 
         // Act:
@@ -49,6 +49,9 @@ public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFacto
         httpResponseMessage.EnsureSuccessStatusCode();
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
         RetrievedPostByIdDto? actualRetrievedPostByIdDto = JsonSerializer.Deserialize<RetrievedPostByIdDto>(responseContent, JsonSerializerOptions);
-        actualRetrievedPostByIdDto.Should().BeEquivalentTo(expectedRetrievedPostByIdDto);
-    }
+        actualRetrievedPostByIdDto
+            .Should()
+            .BeEquivalentTo(
+                expectedRetrievedPostByIdDto,
+                options => options.Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt));    }
 }
