@@ -15,7 +15,7 @@ public abstract class Entity
         return Id == ((Entity)obj).Id;
     }
 
-    public static bool operator ==(Entity left, Entity right)
+    public static bool operator ==(Entity? left, Entity? right)
     {
         if (left is null && right is null)
         {
@@ -28,7 +28,7 @@ public abstract class Entity
         return left.Equals(right);
     }
 
-    public static bool operator !=(Entity left, Entity right)
+    public static bool operator !=(Entity? left, Entity? right)
     {
         return !(left == right);
     }

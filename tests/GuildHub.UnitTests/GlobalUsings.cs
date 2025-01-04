@@ -10,7 +10,6 @@ global using GuildHub.Common.MapHandler;
 global using GuildHub.Api.Data;
 global using GuildHub.Api.Posts.GetPostById;
 global using GuildHub.Api.Posts;
-global using GuildHub.Api.Posts.ValueObjects;
 global using GuildHub.Common.RequestHandler;
 global using GuildHub.Api.Posts.DeletePostById;
 global using GuildHub.Api.Posts.GetPosts;

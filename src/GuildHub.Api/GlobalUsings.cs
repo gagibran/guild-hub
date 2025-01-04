@@ -5,7 +5,6 @@ global using Microsoft.AspNetCore.Http.HttpResults;
 global using GuildHub.Api.Posts;
 global using GuildHub.Common;
 global using GuildHub.Common.ResultHandler;
-global using GuildHub.Api.Posts.ValueObjects;
 global using GuildHub.Api.Data;
 global using GuildHub.Common.RequestHandler;
 global using GuildHub.Api.Posts.GetPostById;

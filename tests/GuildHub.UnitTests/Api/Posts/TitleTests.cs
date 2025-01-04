@@ -1,4 +1,4 @@
-namespace GuildHub.UnitTests.Api.Posts.ValueObjects;
+namespace GuildHub.UnitTests.Api.Posts;
 
 public sealed class TitleTests
 {
