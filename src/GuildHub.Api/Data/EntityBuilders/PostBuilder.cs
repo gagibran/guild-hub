@@ -19,8 +19,10 @@ public sealed class PostBuilder : IEntityTypeConfiguration<Post>
             .HasColumnName("Title")
             .IsRequired();
         postBuilder
-            .Property(post => post.Content)
-            .HasColumnName("Content");
+            .OwnsOne(post => post.Content)
+            .Property(content => content.ContentAdded)
+            .HasColumnName("Content")
+            .HasMaxLength(Constants.MaxContentLength);
         postBuilder
             .Property(post => post.ImagePath)
             .HasColumnName("ImagePath");

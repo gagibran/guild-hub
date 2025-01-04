@@ -17,7 +17,7 @@ namespace GuildHub.Api.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "character varying(40000)", maxLength: 40000, nullable: true),
                     ImagePath = table.Column<string>(type: "text", nullable: true),
                     SearchTsVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: false, computedColumnSql: "to_tsvector('english', coalesce(\"Title\", '') || ' ' || coalesce(\"Content\", ''))", stored: true),
                     Title = table.Column<string>(type: "text", nullable: false),

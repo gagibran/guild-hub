@@ -10,7 +10,7 @@ public sealed class PostToRetrievedPostByIdDtoMapper(IMapDispatcher mapDispatche
         return new RetrievedPostByIdDto(
             post.Id,
             post.Title.ToString(),
-            post.Content,
+            post.Content?.ToString(),
             post.ImagePath,
             retrievedPostRepliesForPostDto,
             post.CreatedAtUtc);

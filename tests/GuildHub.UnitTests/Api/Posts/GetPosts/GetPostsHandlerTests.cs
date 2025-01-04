@@ -8,7 +8,7 @@ public sealed class GetPostsHandlerTests
         // Arrange:
         var getPostsHandler = new GetPostsHandler(new Mock<IApplicationDbContext>().Object, new Mock<IMapDispatcher>().Object);
         var getPostsDto = new GetPostsDto("", It.IsAny<int?>(), It.IsAny<int?>(), "Invalid sort by type");
-        Result<RetrievedPostsDto> expectedResult = Result.Fail<RetrievedPostsDto>(
+        Result<RetrievedPostsDto> expectedResult = Result<RetrievedPostsDto>.Fail(
             $"Cannot sort by '{getPostsDto.SortBy}'. The valid options are: [{string.Join(", ", Enum.GetNames<SortByType>())}].");
 
         // Act:

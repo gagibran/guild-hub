@@ -11,15 +11,16 @@ public sealed class Title : ValueObject
 
     public static Result<Title> Build(string titleName)
     {
-        if (string.IsNullOrWhiteSpace(titleName))
+        string? trimmedTitleName = titleName?.Trim();
+        if (string.IsNullOrWhiteSpace(trimmedTitleName))
         {
-            return Result.Fail<Title>("The post title cannot be empty.");
+            return Result<Title>.Fail("The post title cannot be empty.");
         }
-        if (titleName.Length > Constants.MaxTitleLength)
+        if (trimmedTitleName.Length > PostConstants.MaxTitleLength)
         {
-            return Result.Fail<Title>($"The post title cannot have a more than {Constants.MaxTitleLength}.");
+            return Result<Title>.Fail($"The post title cannot have more than {PostConstants.MaxTitleLength} characters.");
         }
-        return Result.Success(new Title(titleName));
+        return Result<Title>.Succeed(new Title(trimmedTitleName));
     }
 
     public override IEnumerable<object> GetEqualityComponents()

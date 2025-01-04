@@ -13,7 +13,7 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
                 .Select(post => new RetrievedPostByIdDto(
                     post.Id,
                     post.Title.ToString(),
-                    post.Content,
+                    post.Content?.ToString(),
                     post.ImagePath,
                     _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies),
                     post.CreatedAtUtc))

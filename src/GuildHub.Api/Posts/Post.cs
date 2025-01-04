@@ -7,12 +7,12 @@ public sealed class Post : Entity
     private readonly ICollection<PostReply> _postReplies;
 
     public Title Title { get; }
-    public string? Content { get; }
+    public Content? Content { get; }
     public string? ImagePath { get; }
     public ICollection<PostReply> PostReplies { get { return _postReplies; } }
     public NpgsqlTsVector SearchTsVector { get; }
 
-    public Post(Title title, string? content, string? imagePath)
+    public Post(Title title, Content? content, string? imagePath)
     {
         Title = title;
         Content = content;
@@ -37,6 +37,6 @@ public sealed class Post : Entity
             return Result.Fail($"The reply with ID {postReply.Id} has already been added to this post.");
         }
         _postReplies.Add(postReply);
-        return Result.Success();
+        return Result.Succeed();
     }
 }

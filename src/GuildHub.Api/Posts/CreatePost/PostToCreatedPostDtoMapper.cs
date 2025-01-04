@@ -4,6 +4,6 @@ public sealed class PostToCreatedPostDtoMapper : IMapHandler<Post, CreatedPostDt
 {
     public CreatedPostDto Map(Post post)
     {
-        return new CreatedPostDto(post.Id, post.Title.ToString(), post.Content, post.ImagePath);
+        return new CreatedPostDto(post.Id, post.Title.ToString(), post.Content?.ToString(), post.ImagePath);
     }
 }

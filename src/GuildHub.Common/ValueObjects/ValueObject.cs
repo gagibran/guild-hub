@@ -1,4 +1,4 @@
-namespace GuildHub.Common;
+namespace GuildHub.Common.ValueObjects;
 
 public abstract class ValueObject : IEquatable<ValueObject>
 {

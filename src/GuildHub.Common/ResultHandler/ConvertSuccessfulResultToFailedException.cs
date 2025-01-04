@@ -1,8 +1,8 @@
 namespace GuildHub.Common.ResultHandler;
 
-public sealed class ConvertSuccessfulResultToFailedException : Exception
+public sealed class ConvertSuccessfulResultToFailedResultException : Exception
 {
-    public ConvertSuccessfulResultToFailedException()
+    public ConvertSuccessfulResultToFailedResultException()
         : base("Cannot convert a successful result to a failed result.")
     {
     }

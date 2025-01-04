@@ -16,25 +16,26 @@ public sealed class TitleTests
     }
 
     [Fact]
-    public void Build_WhenTitleNameIsGreaterThan300Characters_ShouldReturnFailureWithErrorMessage()
+    public void Build_WhenTitleNameIsGreaterThanMaxTitleLength_ShouldReturnFailureWithErrorMessage()
     {
         // Act:
-        Result<Title> actualTitleResult = Title.Build("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec p");
+        Result<Title> actualTitleResult = Title.Build(new string('*', PostConstants.MaxTitleLength + 1));
 
         // Assert:
-        actualTitleResult.Should().BeEquivalentTo(Result.Fail($"The post title cannot have a more than {Constants.MaxTitleLength}."));
+        actualTitleResult.Should().BeEquivalentTo(Result.Fail($"The post title cannot have more than {PostConstants.MaxTitleLength} characters."));
     }
 
     [Fact]
     public void Build_WhenTitleIsCorrect_ShouldReturnSuccessWithTheTitleObject()
     {
-        // Arrange
+        // Arrange:
+        const string TitleName = "Title";
 
         // Act:
-        Result<Title> actualTitleResult = Title.Build("Correct Title");
+        Result<Title> actualTitleResult = Title.Build(TitleName);
 
         // Assert:
-        actualTitleResult.Value!.ToString().Should().Be("Correct Title");
+        actualTitleResult.Value!.ToString().Should().Be(TitleName);
         actualTitleResult.IsSuccess.Should().BeTrue();
     }
 }

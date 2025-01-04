@@ -1,6 +1,6 @@
 namespace GuildHub.Common.ResultHandler;
 
-public partial class Result
+public class Result
 {
     public bool IsSuccess { get; }
     public List<string> Errors { get; }
@@ -12,7 +12,7 @@ public partial class Result
             throw new UnsuccessfulResultMustHaveErrorTypeWithErrorMessageException();
         }
         IsSuccess = isSuccess;
-        Errors = [error];
+        Errors = isSuccess ? [] : [error];
     }
 
     protected Result(bool isSuccess, List<string> errors)
@@ -25,7 +25,7 @@ public partial class Result
         Errors = errors;
     }
 
-    public static Result Success()
+    public static Result Succeed()
     {
         return new Result(true);
     }
@@ -40,41 +40,20 @@ public partial class Result
         return new Result(false, errors);
     }
 
-    public static Result<TValue> Success<TValue>(TValue value)
+    public static Result Combine(Result result1, Result result2)
     {
-        return new Result<TValue>(true, value);
-    }
-
-    public static Result<TValue> Fail<TValue>(string error)
-    {
-        return new Result<TValue>(false, error: error);
-    }
-
-    public static Result<TValue> Fail<TValue>(List<string> errors)
-    {
-        return new Result<TValue>(false, errors);
-    }
-
-    public static Result<TValue> Fail<TValue>(Result failedResult)
-    {
-        if (failedResult.IsSuccess)
+        if (result1.IsSuccess && result2.IsSuccess)
         {
-            throw new ConvertSuccessfulResultToFailedException();
+            return new Result(true);
         }
-        return new Result<TValue>(false, failedResult.Errors);
-    }
-}
-
-public sealed class Result<TValue> : Result
-{
-    public TValue? Value { get; }
-
-    internal Result(bool isSuccess, TValue? value = default, string? error = null) : base(isSuccess, error)
-    {
-        Value = value;
-    }
-
-    internal Result(bool isSuccess, List<string> errors) : base(isSuccess, errors)
-    {
+        if (!result1.IsSuccess && !result2.IsSuccess)
+        {
+            return new Result(false, [.. result1.Errors, .. result2.Errors]);
+        }
+        if (!result1.IsSuccess)
+        {
+            return new Result(false, result1.Errors);
+        }
+        return new Result(false, result2.Errors);
     }
 }

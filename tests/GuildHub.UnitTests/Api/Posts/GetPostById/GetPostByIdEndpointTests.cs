@@ -29,7 +29,7 @@ public sealed class GetPostByIdEndpointTests
             });
         _requestDispatcherMock
             .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdDto, RetrievedPostByIdDto>(It.IsAny<GetPostByIdDto>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result.Fail<RetrievedPostByIdDto>(ExpectedErrorMessage));
+            .ReturnsAsync(Result<RetrievedPostByIdDto>.Fail(ExpectedErrorMessage));
 
         // Act:
         Results<ProblemHttpResult, Ok<RetrievedPostByIdDto>> actualResult = await GetPostByIdEndpoint.GetPostByIdAsync(
@@ -59,7 +59,7 @@ public sealed class GetPostByIdEndpointTests
         Ok<RetrievedPostByIdDto> expectedOk = TypedResults.Ok(expectedRetrievedPostByIdDto);
         _requestDispatcherMock
             .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdDto, RetrievedPostByIdDto>(It.IsAny<GetPostByIdDto>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result.Success(expectedRetrievedPostByIdDto));
+            .ReturnsAsync(Result<RetrievedPostByIdDto>.Succeed(expectedRetrievedPostByIdDto));
 
         // Act:
         Results<ProblemHttpResult, Ok<RetrievedPostByIdDto>> actualResult = await GetPostByIdEndpoint.GetPostByIdAsync(

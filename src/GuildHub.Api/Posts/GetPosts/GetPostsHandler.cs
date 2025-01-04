@@ -18,13 +18,13 @@ public sealed class GetPostsHandler(IApplicationDbContext applicationDbContext, 
         }
         if(!Enum.TryParse(getPostsDto.SortBy, true, out SortByType sortByType))
         {
-            return Result.Fail<RetrievedPostsDto>(
+            return Result<RetrievedPostsDto>.Fail(
                 $"Cannot sort by '{getPostsDto.SortBy}'. The valid options are: [{string.Join(", ", Enum.GetNames<SortByType>())}].");
         }
         if (isQueryNullOrWhitespace
             && (sortByType == SortByType.Relevance || sortByType == SortByType.RelevanceAsc || sortByType == SortByType.Hot))
         {
-            return Result.Fail<RetrievedPostsDto>($"Cannot sort by '{sortByType}' without a search query.");
+            return Result<RetrievedPostsDto>.Fail($"Cannot sort by '{sortByType}' without a search query.");
         }
         posts = sortByType switch
         {
@@ -44,6 +44,6 @@ public sealed class GetPostsHandler(IApplicationDbContext applicationDbContext, 
             getPostsDto.PostsPerPage,
             cancellationToken);
         RetrievedPostsDto retrievedPostByIdDtos = _mapDispatcher.DispatchMap<PagedList<Post>, RetrievedPostsDto>(pagedPosts);
-        return Result.Success(retrievedPostByIdDtos);
+        return Result<RetrievedPostsDto>.Succeed(retrievedPostByIdDtos);
     }
 }

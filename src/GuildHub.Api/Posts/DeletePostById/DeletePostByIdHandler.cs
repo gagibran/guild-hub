@@ -13,6 +13,6 @@ public sealed class DeletePostByIdHandler(IApplicationDbContext applicationDbCon
         }
         _applicationDbContext.Posts.Remove(retrievedPost);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
-        return Result.Success();
+        return Result.Succeed();
     }
 }

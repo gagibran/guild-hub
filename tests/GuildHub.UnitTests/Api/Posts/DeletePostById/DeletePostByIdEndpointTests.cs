@@ -48,7 +48,7 @@ public sealed class DeletePostByIdEndpointTests
         // Arrange:
         _requestDispatcherMock
             .Setup(dispatcher => dispatcher.DispatchRequestAsync(It.IsAny<DeletePostByIdDto>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result.Success());
+            .ReturnsAsync(Result.Succeed());
 
         // Act:
         Results<ProblemHttpResult, NoContent> actualResult = await DeletePostByIdEndpoint.DeletePostByIdAsync(

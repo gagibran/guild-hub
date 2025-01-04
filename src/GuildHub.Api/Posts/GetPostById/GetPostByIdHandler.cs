@@ -10,9 +10,9 @@ public sealed class GetPostByIdHandler(IApplicationDbContext applicationDbContex
         Post? retrievedPost = await _applicationDbContext.Posts.FindAsync([getPostByIdDto.Id], cancellationToken);
         if (retrievedPost is null)
         {
-            return Result.Fail<RetrievedPostByIdDto>($"No post with the ID '{getPostByIdDto.Id}' was found.");
+            return Result<RetrievedPostByIdDto>.Fail($"No post with the ID '{getPostByIdDto.Id}' was found.");
         }
         RetrievedPostByIdDto retrievedPostByIdDto = _mapDispatcher.DispatchMap<Post, RetrievedPostByIdDto>(retrievedPost);
-        return Result.Success(retrievedPostByIdDto);
+        return Result<RetrievedPostByIdDto>.Succeed(retrievedPostByIdDto);
     }
 }

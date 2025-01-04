@@ -14,7 +14,7 @@ using NpgsqlTypes;
 namespace GuildHub.Api.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241226184607_AddedApplicationModels")]
+    [Migration("20250102005312_AddedApplicationModels")]
     partial class AddedApplicationModels
     {
         /// <inheritdoc />
@@ -66,10 +66,6 @@ namespace GuildHub.Api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Content")
-                        .HasColumnType("text")
-                        .HasColumnName("Content");
-
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreatedAt");
@@ -116,6 +112,30 @@ namespace GuildHub.Api.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("GuildHub.Api.Posts.Post", b =>
+                {
+                    b.OwnsOne("GuildHub.Common.ValueObjects.Content", "Content", b1 =>
+                        {
+                            b1.Property<Guid>("PostId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("ContentAdded")
+                                .IsRequired()
+                                .HasMaxLength(40000)
+                                .HasColumnType("character varying(40000)")
+                                .HasColumnName("Content");
+
+                            b1.HasKey("PostId");
+
+                            b1.ToTable("Posts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PostId");
+                        });
+
+                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("GuildHub.Api.Posts.Post", b =>

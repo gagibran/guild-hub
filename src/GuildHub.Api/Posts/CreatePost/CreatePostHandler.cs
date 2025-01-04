@@ -7,15 +7,17 @@ public sealed class CreatePostHandler(IApplicationDbContext applicationDbContext
 
     public async Task<Result<CreatedPostDto>> HandleAsync(CreatePostDto createPostDto, CancellationToken cancellationToken)
     {
-        Result<Title> postTitleResult = Title.Build(createPostDto.Title);
-        if (!postTitleResult.IsSuccess)
+        Result<Title> titleResult = Title.Build(createPostDto.Title);
+        Result<Content?> contentResult = Content.Build(createPostDto.Content);
+        Result combinedResults = Result.Combine(contentResult, titleResult);
+        if (!combinedResults.IsSuccess)
         {
-            return Result.Fail<CreatedPostDto>(postTitleResult);
+            return Result<CreatedPostDto>.SetTypeToFailedResult(combinedResults);
         }
-        var post = new Post(postTitleResult.Value!, createPostDto.Content, createPostDto.ImagePath);
+        var post = new Post(titleResult.Value!, contentResult.Value, createPostDto.ImagePath);
         await _applicationDbContext.Posts.AddAsync(post, cancellationToken);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
         CreatedPostDto createdPostDto = _mapDispatcher.DispatchMap<Post, CreatedPostDto>(post);
-        return Result.Success(createdPostDto);
+        return Result<CreatedPostDto>.Succeed(createdPostDto);
     }
 }
