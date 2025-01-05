@@ -48,7 +48,8 @@ public sealed class GetPostByIdHandlerTests
             "Content",
             "ImagePath",
             [new("Message", "ImagePath", new DateTime(2020, 1, 2)), new("Message2", "ImagePath2", new DateTime(2020, 1, 2))],
-            new DateTime(2020, 1, 1));
+            new DateTime(2020, 1, 1),
+            null);
         Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result<RetrievedPostByIdDto>.Succeed(expectedRetrievedPostByIdDto);
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))

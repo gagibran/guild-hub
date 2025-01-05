@@ -9,19 +9,19 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         {
             {
                 "{\"title\": \"New Title\", \"content\": \"New Content\", \"imagePath\": \"New ImagePath\"}",
-                new(It.IsAny<Guid>(), "New Title", "New Content", "New ImagePath", [], It.IsAny<DateTime>())
+                new(It.IsAny<Guid>(), "New Title", "New Content", "New ImagePath", [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
             },
             {
                 "{\"title\": \"New Title\", \"imagePath\": \"ImagePath\"}",
-                new(It.IsAny<Guid>(), "New Title", null, "ImagePath", [], It.IsAny<DateTime>())
+                new(It.IsAny<Guid>(), "New Title", null, "ImagePath", [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
             },
             {
                 "{\"title\": \"New Title\", \"content\": \"New Content\"}",
-                new(It.IsAny<Guid>(), "New Title", "New Content", null, [], It.IsAny<DateTime>())
+                new(It.IsAny<Guid>(), "New Title", "New Content", null, [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
             },
             {
                 "{\"title\": \"New Title\"}",
-                new(It.IsAny<Guid>(), "New Title", null, null, [], It.IsAny<DateTime>())
+                new(It.IsAny<Guid>(), "New Title", null, null, [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
             }
         };
     }
@@ -51,7 +51,8 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDto,
                 options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
                     .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
     }
 

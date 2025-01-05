@@ -13,6 +13,7 @@ public sealed class PostToRetrievedPostByIdDtoMapper(IMapDispatcher mapDispatche
             post.Content?.ToString(),
             post.ImagePath,
             retrievedPostRepliesForPostDto,
-            post.CreatedAtUtc);
+            post.CreatedAtUtc,
+            post.UpdatedAtUtc);
     }
 }

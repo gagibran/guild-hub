@@ -16,7 +16,8 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
                     post.Content?.ToString(),
                     post.ImagePath,
                     _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies),
-                    post.CreatedAtUtc))
+                    post.CreatedAtUtc,
+                    post.UpdatedAtUtc))
                 .ToList(),
             pagedPosts.CurrentPageIndex,
             pagedPosts.EntitiesPerPage,

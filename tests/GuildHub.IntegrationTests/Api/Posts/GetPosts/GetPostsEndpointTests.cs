@@ -1,5 +1,4 @@
 using GuildHub.Api.Posts.GetPosts;
-using Moq;
 
 namespace GuildHub.IntegrationTests.Api.Posts.GetPosts;
 
@@ -17,69 +16,252 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             {
                 Constants.BasePostEndpoint,
                 [
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}2",
+                        $"{ExpectedContent}2",
+                        $"{ExpectedImagePath}2",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}3",
+                        $"{ExpectedContent}3",
+                        $"{ExpectedImagePath}3",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=2&postsPerPage=2",
                 [
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}3",
+                        $"{ExpectedContent}3",
+                        $"{ExpectedImagePath}3",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=1&postsPerPage=3",
                 [
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}2",
+                        $"{ExpectedContent}2",
+                        $"{ExpectedImagePath}2",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}3",
+                        $"{ExpectedContent}3",
+                        $"{ExpectedImagePath}3",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=2&postsPerPage=3",
-                [new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())]
+                [
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
+                ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=1&postsPerPage=4",
                 [
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}2",
+                        $"{ExpectedContent}2",
+                        $"{ExpectedImagePath}2",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}3",
+                        $"{ExpectedContent}3",
+                        $"{ExpectedImagePath}3",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=100&postsPerPage=4",
                 [
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}2",
+                        $"{ExpectedContent}2",
+                        $"{ExpectedImagePath}2",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}3",
+                        $"{ExpectedContent}3",
+                        $"{ExpectedImagePath}3",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=1&postsPerPage=1",
-                [new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>())]
+                [
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
+                ]
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=200&postsPerPage=1",
-                [new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())]
+                [
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
+                ]
             },
             {
                 $"{Constants.BasePostEndpoint}?postsPerPage=1",
-                [new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>())]
+                [
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
+                ]
 
             },
             {
                 $"{Constants.BasePostEndpoint}?currentPageIndex=37",
                 [
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), $"{ExpectedTitle}4", $"{ExpectedContent}4", $"{ExpectedImagePath}4", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}1",
+                        $"{ExpectedContent}1",
+                        $"{ExpectedImagePath}1",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}2",
+                        $"{ExpectedContent}2",
+                        $"{ExpectedImagePath}2",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}3",
+                        $"{ExpectedContent}3",
+                        $"{ExpectedImagePath}3",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        $"{ExpectedTitle}4",
+                        $"{ExpectedContent}4",
+                        $"{ExpectedImagePath}4",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             }
         };
@@ -92,75 +274,265 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             {
                 Constants.BasePostEndpoint,
                 [
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior vs. thief?", "What are some good builds for thieves against warriors?", null, [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior vs. thief?",
+                        "What are some good builds for thieves against warriors?",
+                        null, [], It.IsAny<DateTime>(), It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=none",
                 [
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior vs. thief?", "What are some good builds for thieves against warriors?", null, [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior vs. thief?",
+                        "What are some good builds for thieves against warriors?",
+                        null, [], It.IsAny<DateTime>(), It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=date",
                 [
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior vs. thief?", "What are some good builds for thieves against warriors?", null, [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior vs. thief?",
+                        "What are some good builds for thieves against warriors?",
+                        null, [], It.IsAny<DateTime>(), It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=dateasc",
                 [
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior vs. thief?", "What are some good builds for thieves against warriors?", null, [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior vs. thief?",
+                        "What are some good builds for thieves against warriors?",
+                        null, [], It.IsAny<DateTime>(), It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=relevance&query=mage",
                 [
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=relevanceasc&query=mage",
                 [
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], It.IsAny<DateTime>()),
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], It.IsAny<DateTime>())
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        It.IsAny<DateTime>(),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=relevanceasc&query=warrior",
                 [
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], new DateTime(2023, 7, 20)),
-                    new(It.IsAny<Guid>(), "Warrior vs. thief?", "What are some good builds for thieves against warriors?", null, [], new DateTime(2022, 5, 12))
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        new DateTime(2023,7, 20),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior vs. thief?",
+                        "What are some good builds for thieves against warriors?",
+                        null,
+                        [],
+                        new DateTime(2022, 5, 12),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=relevance&query=warrior",
                 [
-                    new(It.IsAny<Guid>(), "Warrior vs. thief?", "What are some good builds for thieves against warriors?", null, [], new DateTime(2022, 5, 12)),
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], new DateTime(2023, 7, 20))
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior vs. thief?",
+                        "What are some good builds for thieves against warriors?",
+                        null,
+                        [],
+                        new DateTime(2022, 5, 12),
+                        It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        new DateTime(2023, 7, 20),
+                        It.IsAny<DateTime?>())
                 ]
             },
             {
                 $"{Constants.BasePostEndpoint}?sortBy=hot&query=mage",
                 [
-                    new(It.IsAny<Guid>(), "Warrior mage killer build", "You guys cry too much, check out this build.", "MageKillerBuild.png", [], new DateTime(2023, 7, 20)),
-                    new(It.IsAny<Guid>(), "Mages, mages, mages!", "I'm sick of this OP class!", "KilledByMage.jpeg", [], new DateTime(2022, 3, 31)),
-                    new(It.IsAny<Guid>(), "Mages are very OP", "Mages should be nerfed.", "OpMage.jpeg", [], new DateTime(2021, 3, 31))
+                    new(
+                        It.IsAny<Guid>(),
+                        "Warrior mage killer build",
+                        "You guys cry too much, check out this build.",
+                        "MageKillerBuild.png",
+                        [],
+                        new DateTime(2023,
+                        7, 20), It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages, mages, mages!",
+                        "I'm sick of this OP class!",
+                        "KilledByMage.jpeg",
+                        [],
+                        new DateTime(2022,
+                        3, 31), It.IsAny<DateTime?>()),
+                    new(
+                        It.IsAny<Guid>(),
+                        "Mages are very OP",
+                        "Mages should be nerfed.",
+                        "OpMage.jpeg",
+                        [],
+                        new DateTime(2021, 3, 31), It.IsAny<DateTime?>())
                 ]
             }
         };
@@ -188,9 +560,18 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
         // Arrange:
         var expectedRetrievedPostByIdDtos = new List<RetrievedPostByIdDto>
         {
-            new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1", [], It.IsAny<DateTime>()),
-            new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2", [], It.IsAny<DateTime>()),
-            new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3", [], It.IsAny<DateTime>())
+            new(It.IsAny<Guid>(), $"{ExpectedTitle}1", $"{ExpectedContent}1", $"{ExpectedImagePath}1",
+                [],
+                It.IsAny<DateTime>(),
+                It.IsAny<DateTime?>()),
+            new(It.IsAny<Guid>(), $"{ExpectedTitle}2", $"{ExpectedContent}2", $"{ExpectedImagePath}2",
+                [],
+                It.IsAny<DateTime>(),
+                It.IsAny<DateTime?>()),
+            new(It.IsAny<Guid>(), $"{ExpectedTitle}3", $"{ExpectedContent}3", $"{ExpectedImagePath}3",
+                [],
+                It.IsAny<DateTime>(),
+                It.IsAny<DateTime?>()),
         };
         var createdPostId1 = (await CreateAsync<CreatedPostDto>(
             $"{{\"title\": \"{ExpectedTitle}1\", \"content\": \"{ExpectedContent}1\", \"imagePath\": \"{ExpectedImagePath}1\"}}",
@@ -215,7 +596,8 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDtos,
                 options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
                     .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
 
         // Clean up:
@@ -255,7 +637,8 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDtos,
                 options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
                     .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
 
         // Clean up:
@@ -296,7 +679,8 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDtos,
                 options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
                     .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
 
         // Clean up:

@@ -55,7 +55,8 @@ public sealed class GetPostByIdEndpointTests
                 new("Message1", "ImagePath1", new DateTime(2020, 1, 1)),
                 new("Message2", "ImagePath2", new DateTime(2020, 1, 2))
             ],
-            new DateTime(2020, 1, 1));
+            new DateTime(2020, 1, 1),
+            new DateTime(2022, 4, 6));
         Ok<RetrievedPostByIdDto> expectedOk = TypedResults.Ok(expectedRetrievedPostByIdDto);
         _requestDispatcherMock
             .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdDto, RetrievedPostByIdDto>(It.IsAny<GetPostByIdDto>(), It.IsAny<CancellationToken>()))

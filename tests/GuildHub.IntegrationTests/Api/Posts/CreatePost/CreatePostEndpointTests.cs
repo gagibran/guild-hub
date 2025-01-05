@@ -47,7 +47,8 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
             ExpectedContent,
             ExpectedImagePath,
             [],
-            It.IsAny<DateTime>());
+            It.IsAny<DateTime>(),
+            It.IsAny<DateTime?>());
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
         {
             Content = new StringContent(
@@ -69,7 +70,8 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
             .BeEquivalentTo(
                 expectedRetrievedPostByIdDto,
                 options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAt)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
+                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
                     .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
     }
 }

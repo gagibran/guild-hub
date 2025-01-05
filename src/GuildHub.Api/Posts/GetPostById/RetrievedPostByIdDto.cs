@@ -6,5 +6,6 @@ public sealed record RetrievedPostByIdDto(
     string? Content,
     string? ImagePath,
     List<RetrievedPostReplyForPostDto> Replies,
-    DateTime CreatedAt)
+    DateTime CreatedAtUtc,
+    DateTime? UpdatedAtUtc)
     : IResponse;
