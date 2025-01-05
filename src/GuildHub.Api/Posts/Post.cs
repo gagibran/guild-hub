@@ -12,7 +12,7 @@ public sealed class Post : Entity
     public ICollection<PostReply> PostReplies { get { return _postReplies; } }
     public NpgsqlTsVector SearchTsVector { get; }
 
-    public Post(Title title, Content? content, string? imagePath)
+    private Post(Title title, Content? content, string? imagePath)
     {
         Title = title;
         Content = content;
@@ -30,7 +30,19 @@ public sealed class Post : Entity
         _postReplies = [];
     }
 
-    public Result UpdatePost(string title, string? content, string? imagePath)
+    public static Result<Post> Build(string title, string? content, string? imagePath)
+    {
+        Result<Title> titleResult = Title.Build(title);
+        Result<Content?> contentResult = Content.Build(content);
+        Result combinedResults = Result.Combine(contentResult, titleResult);
+        if (!combinedResults.IsSuccess)
+        {
+            return Result<Post>.SetTypeToFailedResult(combinedResults);
+        }
+        return Result<Post>.Succeed(new Post(titleResult.Value!, contentResult.Value, imagePath));
+    }
+
+    public Result Update(string title, string? content, string? imagePath)
     {
         Result<Title> titleResult = Title.Build(title);
         Result<Content?> contentResult = Content.Build(content);

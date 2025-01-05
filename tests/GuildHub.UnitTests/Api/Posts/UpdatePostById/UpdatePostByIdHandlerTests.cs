@@ -38,7 +38,7 @@ public sealed class UpdatePostByIdHandlerTests
     {
         // Arrange:
         var updatePostByIdRequest = new UpdatePostByIdRequest(It.IsAny<Guid>(), string.Empty, It.IsAny<string?>(), It.IsAny<string?>());
-        var retrievedPost = new Post(Title.Build("Title").Value!, Content.Build("Content").Value, "ImagePath");
+        Post retrievedPost = Post.Build("Title", "Content", "ImagePath").Value!;
         Result expectedResult = Result.Fail("The title cannot be empty.");
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<object>(), It.IsAny<CancellationToken>()))
@@ -55,7 +55,7 @@ public sealed class UpdatePostByIdHandlerTests
     public async Task HandleAsync_WhenUpdatesSucceeds_ShouldReturnSuccess()
     {
         // Arrange:
-        var retrievedPost = new Post(Title.Build("Title").Value!, Content.Build("Content").Value!, "ImagePath");
+        Post retrievedPost = Post.Build("Title", "Content", "ImagePath").Value!;
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .Returns(new ValueTask<Post?>(retrievedPost));

@@ -37,10 +37,10 @@ public sealed class DeletePostByIdHandlerTests
     public async Task HandleAsync_WhenRetrievedPostIsNotNull_ShouldReturnSuccessWithDto()
     {
         // Arrange:
-        var expectedPost = new Post(Title.Build("Title").Value!, Content.Build("Content").Value!, "ImagePath");
+        Post retrievedPost = Post.Build("Title", "Content", "ImagePath").Value!;
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .Returns(new ValueTask<Post?>(expectedPost));
+            .Returns(new ValueTask<Post?>(retrievedPost));
 
         // Act:
         Result actualResult = await _deletePostByIdHandler.HandleAsync(new(It.IsAny<Guid>()), It.IsAny<CancellationToken>());
@@ -49,7 +49,7 @@ public sealed class DeletePostByIdHandlerTests
         _applicationDbContextMock.Verify(
             applicationDbContext => applicationDbContext.SaveChangesAsync(It.IsAny<CancellationToken>()),
             Times.Once);
-        _postDbSetMock.Verify(postDbSet => postDbSet.Remove(expectedPost), Times.Once);
+        _postDbSetMock.Verify(postDbSet => postDbSet.Remove(retrievedPost), Times.Once);
         actualResult.Should().BeEquivalentTo(Result.Succeed());
     }
 }

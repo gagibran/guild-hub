@@ -52,7 +52,7 @@ public sealed class GetPostByIdHandlerTests
         Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result<RetrievedPostByIdDto>.Succeed(expectedRetrievedPostByIdDto);
         _postDbSetMock
             .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .Returns(new ValueTask<Post?>(new Post(Title.Build("Title").Value!, Content.Build("Content").Value!, "ImagePath")));
+            .Returns(new ValueTask<Post?>(Post.Build("Title", "Content", "ImagePath").Value!));
         _mapDispatcherMock
             .Setup(mapDispatcher => mapDispatcher.DispatchMap<Post, RetrievedPostByIdDto>(It.IsAny<Post>()))
             .Returns(expectedRetrievedPostByIdDto);

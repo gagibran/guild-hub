@@ -5,13 +5,52 @@ namespace GuildHub.UnitTests.Api.Posts;
 public class PostTests
 {
     [Fact]
-    public void UpdatePost_WhenCombinedResultIsFailure_ShouldReturnFailure()
+    public void Build_WhenTitleResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
     {
         // Arrange:
-        var post = new Post(Title.Build("Title").Value!, Content.Build("Content").Value, "ImagePath");
+        Result<Post> expectedPostResult = Result<Post>.Fail("The title cannot be empty.");
 
         // Act:
-        Result actualResult = post.UpdatePost(string.Empty, It.IsAny<string?>(), It.IsAny<string?>());
+        Result<Post> actualPostResult = Post.Build("", "Content", "ImagePath");
+
+        // Assert:
+        actualPostResult.Should().BeEquivalentTo(expectedPostResult);
+    }
+
+    [Fact]
+    public void Build_WhenContentResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
+    {
+        // Arrange:
+        Result<Post> expectedPostResult = Result<Post>.Fail($"The post content cannot have more than {Constants.MaxContentLength} characters.");
+
+        // Act:
+        Result<Post> actualPostResult = Post.Build("Title", new string('*', Constants.MaxContentLength + 1), "ImagePath");
+
+        // Assert:
+        actualPostResult.Should().BeEquivalentTo(expectedPostResult);
+    }
+
+    [Fact]
+    public void Build_WhenTitleResultAndContentResultAreSuccessful_ShouldReturnSuccessfulResultWithPost()
+    {
+        // Act:
+        Result<Post> actualPostResult = Post.Build("Title", "Content", "ImagePath");
+
+        // Assert:
+        actualPostResult.IsSuccess.Should().BeTrue();
+        actualPostResult.Value!.Title.ToString().Should().Be("Title");
+        actualPostResult.Value!.Content!.ToString().Should().Be("Content");
+        actualPostResult.Value!.ImagePath.Should().Be("ImagePath");
+    }
+
+    [Fact]
+    public void Update_WhenCombinedResultIsFailure_ShouldReturnFailure()
+    {
+        // Arrange:
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
+
+        // Act:
+        Result actualResult = post.Update(string.Empty, It.IsAny<string?>(), It.IsAny<string?>());
 
         // Assert:
         actualResult.IsSuccess.Should().BeFalse();
@@ -20,13 +59,13 @@ public class PostTests
     }
 
     [Fact]
-    public void UpdatePost_WhenCombinedResultIsSuccess_ShouldUpdatePost()
+    public void Update_WhenCombinedResultIsSuccess_ShouldUpdatePost()
     {
         // Arrange:
-        var post = new Post(Title.Build("Title").Value!, Content.Build("Content").Value, "ImagePath");
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
 
         // Act:
-        Result actualResult = post.UpdatePost("New Title", "New Content", "New ImagePath");
+        Result actualResult = post.Update("New Title", "New Content", "New ImagePath");
 
         // Assert:
         actualResult.IsSuccess.Should().BeTrue();
@@ -40,7 +79,7 @@ public class PostTests
     public void AddPostReply_WhenReplyIsUnique_ShouldAddReply()
     {
         // Arrange:
-        var post = new Post(Title.Build("Test Title").Value!, Content.Build("Test Content").Value!, "ImagePath");
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
         var postReply = new PostReply(post, "Message", "ImagePath");
 
         // Act:
@@ -55,7 +94,7 @@ public class PostTests
     public void AddPostReply_ShouldFail_WhenReplyIsDuplicate()
     {
         // Arrange:
-        var post = new Post(Title.Build("Test Title").Value!, Content.Build("Test Content").Value!, "ImagePath");
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
         var postReply = new PostReply(post, "Message", "ImagePath");
         post.AddPostReply(postReply);
 

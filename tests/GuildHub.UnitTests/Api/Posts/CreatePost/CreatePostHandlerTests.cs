@@ -14,7 +14,7 @@ public sealed class CreatePostHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_WhenTitleResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
+    public async Task HandleAsync_WhenPostResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
     {
         // Arrange:
         Result<CreatedPostDto> expectedCreatedPostDtoResult = Result<CreatedPostDto>.Fail("The title cannot be empty.");
@@ -28,24 +28,7 @@ public sealed class CreatePostHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_WhenContentResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
-    {
-        // Arrange:
-        Result<CreatedPostDto> expectedCreatedPostDtoResult = Result<CreatedPostDto>.Fail($"The post content cannot have more than {Constants.MaxContentLength} characters.");
-        var createPostDto = new CreatePostDto(
-            "Title",
-            new string('*', Constants.MaxContentLength + 1),
-            "ImagePath");
-
-        // Act:
-        Result<CreatedPostDto> actualCreatedPostDtoResult = await _createPostHandler.HandleAsync(createPostDto, It.IsAny<CancellationToken>());
-
-        // Assert:
-        actualCreatedPostDtoResult.Should().BeEquivalentTo(expectedCreatedPostDtoResult);
-    }
-
-    [Fact]
-    public async Task HandleAsync_WhenTitleResultAndContentResultAreSuccessful_ShouldCallDatabaseMethodsAndReturnSuccessWithDto()
+    public async Task HandleAsync_WhenPostResultIsSuccessful_ShouldCallDatabaseMethodsAndReturnSuccessWithDto()
     {
         // Arrange:
         var postDbSetMock = new Mock<DbSet<Post>>();
