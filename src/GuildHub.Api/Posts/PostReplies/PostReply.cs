@@ -1,4 +1,4 @@
-namespace GuildHub.Api.PostReplies;
+namespace GuildHub.Api.Posts.PostReplies;
 
 public sealed class PostReply : Entity
 {

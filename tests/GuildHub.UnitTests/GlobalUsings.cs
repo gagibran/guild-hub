@@ -14,5 +14,4 @@ global using GuildHub.Common.RequestHandler;
 global using GuildHub.Api.Posts.DeletePostById;
 global using GuildHub.Api.Posts.GetPosts;
 global using GuildHub.Api.Posts.UpdatePostById;
-global using GuildHub.Common.ValueObjects;
 global using GuildHub.Common;

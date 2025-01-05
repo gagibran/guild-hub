@@ -1,4 +1,4 @@
-namespace GuildHub.Common.ValueObjects;
+namespace GuildHub.Api.Posts;
 
 public sealed class Content : ValueObject
 {

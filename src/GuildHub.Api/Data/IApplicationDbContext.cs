@@ -1,3 +1,5 @@
+using GuildHub.Api.Posts.PostReplies;
+
 namespace GuildHub.Api.Data;
 
 public interface IApplicationDbContext

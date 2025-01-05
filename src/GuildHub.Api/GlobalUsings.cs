@@ -8,7 +8,5 @@ global using GuildHub.Common.ResultHandler;
 global using GuildHub.Api.Data;
 global using GuildHub.Common.RequestHandler;
 global using GuildHub.Api.Posts.GetPostById;
-global using GuildHub.Api.PostReplies;
 global using GuildHub.Common.MapHandler;
 global using GuildHub.Common.Pagination;
-global using GuildHub.Common.ValueObjects;

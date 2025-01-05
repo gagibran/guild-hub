@@ -1,3 +1,4 @@
+using GuildHub.Api.Posts.PostReplies;
 using GuildHub.Common.Pagination;
 
 namespace GuildHub.Api.Posts.GetPosts;

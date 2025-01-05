@@ -1,6 +1,7 @@
 using GuildHub.Api.Posts.CreatePost;
 using GuildHub.Api.Posts.DeletePostById;
 using GuildHub.Api.Posts.GetPosts;
+using GuildHub.Api.Posts.PostReplies;
 using GuildHub.Api.Posts.UpdatePostById;
 
 namespace GuildHub.Api.Posts;

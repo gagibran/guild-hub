@@ -1,4 +1,4 @@
-using GuildHub.Api.PostReplies;
+using GuildHub.Api.Posts.PostReplies;
 
 namespace GuildHub.UnitTests.Api.Posts;
 
