@@ -12,7 +12,7 @@ public sealed class TitleTests
         Result<Title> actualTitleResult = Title.Build(title!);
 
         // Assert:
-        actualTitleResult.Should().BeEquivalentTo(Result.Fail("The post title cannot be empty."));
+        actualTitleResult.Should().BeEquivalentTo(Result.Fail("The title cannot be empty."));
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public sealed class TitleTests
         Result<Title> actualTitleResult = Title.Build(new string('*', PostConstants.MaxTitleLength + 1));
 
         // Assert:
-        actualTitleResult.Should().BeEquivalentTo(Result.Fail($"The post title cannot have more than {PostConstants.MaxTitleLength} characters."));
+        actualTitleResult.Should().BeEquivalentTo(Result.Fail($"The title cannot have more than {PostConstants.MaxTitleLength} characters."));
     }
 
     [Fact]

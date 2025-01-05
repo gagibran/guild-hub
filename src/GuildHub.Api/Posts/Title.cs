@@ -14,11 +14,11 @@ public sealed class Title : ValueObject
         string? trimmedTitleName = titleName?.Trim();
         if (string.IsNullOrWhiteSpace(trimmedTitleName))
         {
-            return Result<Title>.Fail("The post title cannot be empty.");
+            return Result<Title>.Fail("The title cannot be empty.");
         }
         if (trimmedTitleName.Length > PostConstants.MaxTitleLength)
         {
-            return Result<Title>.Fail($"The post title cannot have more than {PostConstants.MaxTitleLength} characters.");
+            return Result<Title>.Fail($"The title cannot have more than {PostConstants.MaxTitleLength} characters.");
         }
         return Result<Title>.Succeed(new Title(trimmedTitleName));
     }

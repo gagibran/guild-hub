@@ -6,7 +6,7 @@ public sealed class DeletePostByIdHandler(IApplicationDbContext applicationDbCon
 
     public async Task<Result> HandleAsync(DeletePostByIdDto deletePostByIdDto, CancellationToken cancellationToken)
     {
-        Post? retrievedPost = await _applicationDbContext.Posts.FindAsync([deletePostByIdDto.Id], cancellationToken);
+        Post? retrievedPost = await _applicationDbContext.Posts.FindAsync(deletePostByIdDto.Id, cancellationToken);
         if (retrievedPost is null)
         {
             return Result.Fail($"No post with the ID '{deletePostByIdDto.Id}' was found.");

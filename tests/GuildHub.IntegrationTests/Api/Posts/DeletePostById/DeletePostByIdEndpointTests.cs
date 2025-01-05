@@ -34,7 +34,7 @@ public sealed class DeletePostByIdEndpointTests(IntegrationTestsWebApplicationFa
     {
         // Arrange:
         Guid postId = (await CreateAsync<CreatedPostDto>(
-            $"{{\"title\": \"Title\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}}",
+            "{\"title\": \"Title\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
             Constants.BasePostEndpoint)).Id;
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{Constants.BasePostEndpoint}/{postId}");
 

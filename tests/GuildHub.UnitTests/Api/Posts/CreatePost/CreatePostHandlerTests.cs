@@ -17,7 +17,7 @@ public sealed class CreatePostHandlerTests
     public async Task HandleAsync_WhenTitleResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
     {
         // Arrange:
-        Result<CreatedPostDto> expectedCreatedPostDtoResult = Result<CreatedPostDto>.Fail("The post title cannot be empty.");
+        Result<CreatedPostDto> expectedCreatedPostDtoResult = Result<CreatedPostDto>.Fail("The title cannot be empty.");
         var createPostDto = new CreatePostDto("", "Content", "ImagePath");
 
         // Act:

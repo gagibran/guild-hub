@@ -12,7 +12,7 @@ public sealed class DeletePostByIdEndpointTests
     [Fact]
     public async Task DeletePostByIdAsync_WhenRequestDispatcherReturnsFailedResult_ShouldReturnProblemHttpResultWithError()
     {
-        // Arrange
+        // Arrange:
         const string ExpectedTracerIdentifier = "Identifier";
         const string ExpectedErrorMessage = "Entity error.";
         var defaultHttpContext = new DefaultHttpContext
@@ -31,7 +31,7 @@ public sealed class DeletePostByIdEndpointTests
             .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync(It.IsAny<DeletePostByIdDto>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Fail(ExpectedErrorMessage));
 
-        // Act
+        // Act:
         Results<ProblemHttpResult, NoContent> actualResult = await DeletePostByIdEndpoint.DeletePostByIdAsync(
             _requestDispatcherMock.Object,
             defaultHttpContext,

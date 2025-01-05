@@ -6,9 +6,9 @@ public sealed class Post : Entity
 {
     private readonly ICollection<PostReply> _postReplies;
 
-    public Title Title { get; }
-    public Content? Content { get; }
-    public string? ImagePath { get; }
+    public Title Title { get; private set; }
+    public Content? Content { get; private set; }
+    public string? ImagePath { get; private set; }
     public ICollection<PostReply> PostReplies { get { return _postReplies; } }
     public NpgsqlTsVector SearchTsVector { get; }
 
@@ -28,6 +28,22 @@ public sealed class Post : Entity
         ImagePath = null;
         SearchTsVector = null!;
         _postReplies = [];
+    }
+
+    public Result UpdatePost(string title, string? content, string? imagePath)
+    {
+        Result<Title> titleResult = Title.Build(title);
+        Result<Content?> contentResult = Content.Build(content);
+        Result combinedResult = Result.Combine(titleResult, contentResult);
+        if (!combinedResult.IsSuccess)
+        {
+            return combinedResult;
+        }
+        Title = titleResult.Value!;
+        Content = contentResult.Value;
+        ImagePath = imagePath;
+        UpdatedAtUtc = DateTime.UtcNow;
+        return Result.Succeed();
     }
 
     public Result AddPostReply(PostReply postReply)

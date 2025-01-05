@@ -4,7 +4,7 @@ public abstract class Entity
 {
     public Guid Id { get; } = Guid.NewGuid();
     public DateTime CreatedAtUtc { get; } = DateTime.UtcNow;
-    public DateTime? UpdatedAtUtc { get; private set; }
+    public DateTime? UpdatedAtUtc { get; protected set; }
 
     public override bool Equals(object? obj)
     {

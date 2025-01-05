@@ -51,7 +51,7 @@ public sealed class GetPostByIdHandlerTests
             new DateTime(2020, 1, 1));
         Result<RetrievedPostByIdDto> expectedRetrievedPostByIdDtoResult = Result<RetrievedPostByIdDto>.Succeed(expectedRetrievedPostByIdDto);
         _postDbSetMock
-            .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<object[]>(), It.IsAny<CancellationToken>()))
+            .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .Returns(new ValueTask<Post?>(new Post(Title.Build("Title").Value!, Content.Build("Content").Value!, "ImagePath")));
         _mapDispatcherMock
             .Setup(mapDispatcher => mapDispatcher.DispatchMap<Post, RetrievedPostByIdDto>(It.IsAny<Post>()))

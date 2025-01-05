@@ -39,7 +39,7 @@ public sealed class DeletePostByIdHandlerTests
         // Arrange:
         var expectedPost = new Post(Title.Build("Title").Value!, Content.Build("Content").Value!, "ImagePath");
         _postDbSetMock
-            .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<object[]>(), It.IsAny<CancellationToken>()))
+            .Setup(postDbSet => postDbSet.FindAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .Returns(new ValueTask<Post?>(expectedPost));
 
         // Act:
