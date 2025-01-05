@@ -21,10 +21,10 @@ public class PostTests
     public void Build_WhenContentResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
     {
         // Arrange:
-        Result<Post> expectedPostResult = Result<Post>.Fail($"The post content cannot have more than {Constants.MaxContentLength} characters.");
+        Result<Post> expectedPostResult = Result<Post>.Fail($"The content message cannot have more than {Constants.MaxContentMessageLength} characters.");
 
         // Act:
-        Result<Post> actualPostResult = Post.Build("Title", new string('*', Constants.MaxContentLength + 1), "ImagePath");
+        Result<Post> actualPostResult = Post.Build("Title", new string('*', Constants.MaxContentMessageLength + 1), "ImagePath");
 
         // Assert:
         actualPostResult.Should().BeEquivalentTo(expectedPostResult);
@@ -80,7 +80,7 @@ public class PostTests
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;
-        var postReply = new PostReply(post, "Message", "ImagePath");
+        PostReply postReply = PostReply.Build(post, "Content", "ImagePath").Value!;
 
         // Act:
         Result actualResult = post.AddPostReply(postReply);
@@ -95,7 +95,7 @@ public class PostTests
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;
-        var postReply = new PostReply(post, "Message", "ImagePath");
+        PostReply postReply = PostReply.Build(post, "Content", "ImagePath").Value!;
         post.AddPostReply(postReply);
 
         // Act:

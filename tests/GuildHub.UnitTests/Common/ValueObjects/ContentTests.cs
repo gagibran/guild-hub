@@ -20,11 +20,11 @@ public class ContentTests
     public void Build_WhenContentExceedsMaxLength_ShouldFail()
     {
         // Act:
-        var actualResult = Content.Build(new string('*', Constants.MaxContentLength + 1));
+        var actualResult = Content.Build(new string('*', Constants.MaxContentMessageLength + 1));
 
         // Assert:
         actualResult.IsSuccess.Should().BeFalse();
-        actualResult.Errors.Should().Contain($"The post content cannot have more than {Constants.MaxContentLength} characters.");
+        actualResult.Errors.Should().Contain($"The content message cannot have more than {Constants.MaxContentMessageLength} characters.");
     }
 
     [Fact]
@@ -38,6 +38,6 @@ public class ContentTests
 
         // Assert:
         actualResult.IsSuccess.Should().BeTrue();
-        actualResult.Value?.ContentAdded.Should().Be(ExpectedContent);
+        actualResult.Value?.Message.Should().Be(ExpectedContent);
     }
 }

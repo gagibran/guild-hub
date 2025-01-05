@@ -2,5 +2,5 @@ namespace GuildHub.Common;
 
 public static class Constants
 {
-    public const int MaxContentLength = 40_000;
+    public const int MaxContentMessageLength = 40_000;
 }

@@ -14,7 +14,7 @@ using NpgsqlTypes;
 namespace GuildHub.Api.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250102005312_AddedApplicationModels")]
+    [Migration("20250105164143_AddedApplicationModels")]
     partial class AddedApplicationModels
     {
         /// <inheritdoc />
@@ -26,39 +26,6 @@ namespace GuildHub.Api.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("GuildHub.Api.PostReplies.PostReply", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text")
-                        .HasColumnName("ImagePath");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("Message");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostReplies", (string)null);
-                });
 
             modelBuilder.Entity("GuildHub.Api.Posts.Post", b =>
                 {
@@ -103,25 +70,52 @@ namespace GuildHub.Api.Data.Migrations
                     b.ToTable("Posts", (string)null);
                 });
 
-            modelBuilder.Entity("GuildHub.Api.PostReplies.PostReply", b =>
+            modelBuilder.Entity("GuildHub.Api.Posts.PostReplies.PostReply", b =>
                 {
-                    b.HasOne("GuildHub.Api.Posts.Post", "Post")
-                        .WithMany("PostReplies")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Navigation("Post");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("text")
+                        .HasColumnName("ImagePath");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Content", "GuildHub.Api.Posts.PostReplies.PostReply.Content#Content", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Message")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("Content");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostReplies", (string)null);
                 });
 
             modelBuilder.Entity("GuildHub.Api.Posts.Post", b =>
                 {
-                    b.OwnsOne("GuildHub.Common.ValueObjects.Content", "Content", b1 =>
+                    b.OwnsOne("GuildHub.Api.Posts.Content", "Content", b1 =>
                         {
                             b1.Property<Guid>("PostId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("ContentAdded")
+                            b1.Property<string>("Message")
                                 .IsRequired()
                                 .HasMaxLength(40000)
                                 .HasColumnType("character varying(40000)")
@@ -136,6 +130,17 @@ namespace GuildHub.Api.Data.Migrations
                         });
 
                     b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("GuildHub.Api.Posts.PostReplies.PostReply", b =>
+                {
+                    b.HasOne("GuildHub.Api.Posts.Post", "Post")
+                        .WithMany("PostReplies")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("GuildHub.Api.Posts.Post", b =>

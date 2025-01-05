@@ -20,9 +20,9 @@ public sealed class PostBuilder : IEntityTypeConfiguration<Post>
             .IsRequired();
         postBuilder
             .OwnsOne(post => post.Content)
-            .Property(content => content.ContentAdded)
+            .Property(content => content.Message)
             .HasColumnName("Content")
-            .HasMaxLength(Constants.MaxContentLength);
+            .HasMaxLength(Constants.MaxContentMessageLength);
         postBuilder
             .Property(post => post.ImagePath)
             .HasColumnName("ImagePath");

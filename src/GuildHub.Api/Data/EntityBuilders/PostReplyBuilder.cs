@@ -10,8 +10,9 @@ public sealed class PostReplyBuilder : IEntityTypeConfiguration<PostReply>
             .ToTable("PostReplies")
             .HasKey(postReply => postReply.Id);
         postReplyBuilder
-            .Property(postReply => postReply.Message)
-            .HasColumnName("Message")
+            .ComplexProperty(postReply => postReply.Content)
+            .Property(content => content.Message)
+            .HasColumnName("Content")
             .IsRequired();
         postReplyBuilder
             .Property(postReply => postReply.ImagePath)
