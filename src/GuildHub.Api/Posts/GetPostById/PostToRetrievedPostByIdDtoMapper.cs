@@ -1,5 +1,3 @@
-using GuildHub.Api.Posts.PostReplies;
-
 namespace GuildHub.Api.Posts.GetPostById;
 
 public sealed class PostToRetrievedPostByIdDtoMapper(IMapDispatcher mapDispatcher) : IMapHandler<Post, RetrievedPostByIdDto>

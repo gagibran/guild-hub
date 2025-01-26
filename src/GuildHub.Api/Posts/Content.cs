@@ -9,7 +9,7 @@ public sealed class Content : ValueObject
         Message = message;
     }
 
-    public static Result<Content?> Build(string? content)
+    public static Result<Content?> BuildNullable(string? content)
     {
         if (string.IsNullOrWhiteSpace(content))
         {
@@ -21,6 +21,15 @@ public sealed class Content : ValueObject
             return Result<Content?>.Fail($"The content message cannot have more than {Constants.MaxContentMessageLength} characters.");
         }
         return Result<Content?>.Succeed(new Content(trimmedContent));
+    }
+
+    public static Result<Content> Build(string content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return Result<Content>.Fail($"The content message cannot be null nor empty.");
+        }
+        return BuildNullable(content)!;
     }
 
     public override IEnumerable<object> GetEqualityComponents()

@@ -1,7 +1,6 @@
 using GuildHub.Api.Posts.CreatePost;
 using GuildHub.Api.Posts.DeletePostById;
 using GuildHub.Api.Posts.GetPosts;
-using GuildHub.Api.Posts.PostReplies;
 using GuildHub.Api.Posts.UpdatePostById;
 
 namespace GuildHub.Api.Posts;
@@ -12,6 +11,7 @@ public static class DependencyInjection
     {
         serviceCollection.AddRequestHandlers();
         serviceCollection.AddMapHandlers();
+        serviceCollection.AddPostReplyServices();
         return serviceCollection;
     }
 
@@ -23,6 +23,7 @@ public static class DependencyInjection
         postsGroupBuilder.MapGet("/", GetPostsEndpoint.GetPostsAsync);
         postsGroupBuilder.MapDelete("/{id}", DeletePostByIdEndpoint.DeletePostByIdAsync);
         postsGroupBuilder.MapPut("/{id}", UpdatePostByIdEndpoint.UpdatePostByIdAsync);
+        endpointRouteBuilder.AddPostReplyEndpoints();
     }
 
     private static void AddRequestHandlers(this IServiceCollection serviceCollection)

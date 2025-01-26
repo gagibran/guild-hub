@@ -8,7 +8,7 @@ public sealed class GetPostsHandler(IApplicationDbContext applicationDbContext, 
 
     public async Task<Result<RetrievedPostsDto>> HandleAsync(GetPostsDto getPostsDto, CancellationToken cancellationToken)
     {
-        IQueryable<Post> posts = _applicationDbContext.Posts;
+        IQueryable<Post> posts = _applicationDbContext.Posts.Include(post => post.PostReplies);
         var isQueryNullOrWhitespace = string.IsNullOrWhiteSpace(getPostsDto.Query);
         if (!isQueryNullOrWhitespace)
         {

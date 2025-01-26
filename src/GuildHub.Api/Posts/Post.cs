@@ -1,4 +1,3 @@
-using GuildHub.Api.Posts.PostReplies;
 using NpgsqlTypes;
 
 namespace GuildHub.Api.Posts;
@@ -34,7 +33,7 @@ public sealed class Post : Entity
     public static Result<Post> Build(string title, string? content, string? imagePath)
     {
         Result<Title> titleResult = Title.Build(title);
-        Result<Content?> contentResult = Content.Build(content);
+        Result<Content?> contentResult = Content.BuildNullable(content);
         Result combinedResults = Result.Combine(contentResult, titleResult);
         if (!combinedResults.IsSuccess)
         {
@@ -46,7 +45,7 @@ public sealed class Post : Entity
     public Result Update(string title, string? content, string? imagePath)
     {
         Result<Title> titleResult = Title.Build(title);
-        Result<Content?> contentResult = Content.Build(content);
+        Result<Content?> contentResult = Content.BuildNullable(content);
         Result combinedResult = Result.Combine(titleResult, contentResult);
         if (!combinedResult.IsSuccess)
         {

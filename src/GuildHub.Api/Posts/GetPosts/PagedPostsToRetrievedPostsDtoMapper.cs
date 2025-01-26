@@ -1,6 +1,3 @@
-using GuildHub.Api.Posts.PostReplies;
-using GuildHub.Common.Pagination;
-
 namespace GuildHub.Api.Posts.GetPosts;
 
 public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispatcher) : IMapHandler<PagedList<Post>, RetrievedPostsDto>
@@ -10,8 +7,8 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
     public RetrievedPostsDto Map(PagedList<Post> pagedPosts)
     {
         return new RetrievedPostsDto(
-            pagedPosts.EntitiesInPage
-                .Select(post => new RetrievedPostByIdDto(
+            [
+                .. pagedPosts.EntitiesInPage.Select(post => new RetrievedPostByIdDto(
                     post.Id,
                     post.Title.ToString(),
                     post.Content?.ToString(),
@@ -19,7 +16,7 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
                     _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies),
                     post.CreatedAtUtc,
                     post.UpdatedAtUtc))
-                .ToList(),
+            ],
             pagedPosts.CurrentPageIndex,
             pagedPosts.EntitiesPerPage,
             pagedPosts.EntitiesCount,

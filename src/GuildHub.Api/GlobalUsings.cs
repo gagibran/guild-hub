@@ -10,3 +10,4 @@ global using GuildHub.Common.RequestHandler;
 global using GuildHub.Api.Posts.GetPostById;
 global using GuildHub.Common.MapHandler;
 global using GuildHub.Common.Pagination;
+global using GuildHub.Api.Posts.PostReplies;

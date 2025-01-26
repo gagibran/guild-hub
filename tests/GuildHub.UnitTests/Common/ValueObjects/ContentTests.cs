@@ -6,10 +6,10 @@ public class ContentTests
     [InlineData("")]
     [InlineData("  ")]
     [InlineData(null)]
-    public void Build_WhenContentIsNullOrWhitespace_ShouldReturnSuccessfulResultWithNullContent(string? content)
+    public void BuildNullable_WhenContentIsNullOrWhitespace_ShouldReturnSuccessfulResultWithNullContent(string? content)
     {
         // Act:
-        Result<Content?> actualResult = Content.Build(content);
+        Result<Content?> actualResult = Content.BuildNullable(content);
 
         // Assert:
         actualResult.IsSuccess.Should().BeTrue();
@@ -34,7 +34,7 @@ public class ContentTests
         const string ExpectedContent = "Valid content";
 
         // Act:
-        Result<Content?> actualResult = Content.Build(ExpectedContent);
+        Result<Content> actualResult = Content.Build(ExpectedContent);
 
         // Assert:
         actualResult.IsSuccess.Should().BeTrue();

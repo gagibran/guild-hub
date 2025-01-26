@@ -1,5 +1,3 @@
-using GuildHub.Api.Posts.PostReplies;
-
 namespace GuildHub.UnitTests.Api.Posts;
 
 public class PostTests
@@ -44,7 +42,7 @@ public class PostTests
     }
 
     [Fact]
-    public void Update_WhenCombinedResultIsFailure_ShouldReturnFailure()
+    public void Update_WhenTitleResultAndContentResultFail_ShouldReturnFailure()
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;
@@ -59,7 +57,7 @@ public class PostTests
     }
 
     [Fact]
-    public void Update_WhenCombinedResultIsSuccess_ShouldUpdatePost()
+    public void Update_WhenTitleResultAndContentResultAreSuccessful_ShouldUpdatePost()
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;
@@ -91,7 +89,7 @@ public class PostTests
     }
 
     [Fact]
-    public void AddPostReply_ShouldFail_WhenReplyIsDuplicate()
+    public void AddPostReply_WhenReplyIsDuplicate_ShouldFail()
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;

@@ -21,7 +21,7 @@ public sealed class PostReply : Entity
 
     public static Result<PostReply> Build(Post post, string content, string? imagePath)
     {
-        Result<Content?> contentResult = Content.Build(content);
+        Result<Content> contentResult = Content.Build(content);
         if (!contentResult.IsSuccess)
         {
             return Result<PostReply>.SetTypeToFailedResult(contentResult);
