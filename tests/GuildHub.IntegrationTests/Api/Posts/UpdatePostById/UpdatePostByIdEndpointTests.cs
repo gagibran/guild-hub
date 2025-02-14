@@ -1,40 +1,44 @@
+using GuildHub.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace GuildHub.IntegrationTests.Api.Posts.UpdatePostById;
 
+[Collection(nameof(SharedDatabaseFixture))]
 public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
     : IntegrationTest(integrationTestsWebApplicationFactory)
 {
-    public static TheoryData<string, RetrievedPostByIdDto> UpdatePostByIdAsyncWhenPostExistsShouldUpdatePostTestData()
+    public static TheoryData<string, List<string>> UpdatePostByIdAsyncWhenPostExistsShouldUpdatePostTestData()
     {
-        return new TheoryData<string, RetrievedPostByIdDto>
+        return new TheoryData<string, List<string>>
         {
             {
                 "{\"title\": \"New Title\", \"content\": \"New Content\", \"imagePath\": \"New ImagePath\"}",
-                new(It.IsAny<Guid>(), "New Title", "New Content", "New ImagePath", [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
+                ["New Title", "New Content", "New ImagePath"]
             },
             {
                 "{\"title\": \"New Title\", \"imagePath\": \"ImagePath\"}",
-                new(It.IsAny<Guid>(), "New Title", null, "ImagePath", [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
+                ["New Title", null, "ImagePath"]
             },
             {
                 "{\"title\": \"New Title\", \"content\": \"New Content\"}",
-                new(It.IsAny<Guid>(), "New Title", "New Content", null, [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
+                ["New Title", "New Content", null]
             },
             {
                 "{\"title\": \"New Title\"}",
-                new(It.IsAny<Guid>(), "New Title", null, null, [], It.IsAny<DateTime>(), It.IsAny<DateTime>())
+                ["New Title", null, null]
             }
         };
     }
 
     [Theory]
     [MemberData(nameof(UpdatePostByIdAsyncWhenPostExistsShouldUpdatePostTestData))]
-    public async Task UpdatePostByIdAsync_WhenPostExists_ShouldUpdatePost(string body, RetrievedPostByIdDto expectedRetrievedPostByIdDto)
+    public async Task UpdatePostByIdAsync_WhenPostExists_ShouldUpdatePost(string body, List<string> expectedRetrievedPost)
     {
         // Arrange:
-        Guid postId = (await CreateAsync<CreatedPostDto>(
-            "{\"title\": \"Title\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
-            Constants.BasePostEndpoint)).Id;
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, $"{Constants.BasePostEndpoint}/{postId}")
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
+        await ApplicationDbContext.AddAsync(post);
+        await ApplicationDbContext.SaveChangesAsync();
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, $"{Constants.BasePostEndpoint}/{post.Id}")
         {
             Content = new StringContent(body, Encoding.UTF8, MediaTypeNames.Application.Json)
         };
@@ -45,15 +49,14 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         // Assert:
         httpResponseMessage.EnsureSuccessStatusCode();
         httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.NoContent);
-        RetrievedPostByIdDto actualRetrievedPostByIdDto = await GetAsync<RetrievedPostByIdDto>($"{Constants.BasePostEndpoint}/{postId}");
-        actualRetrievedPostByIdDto
-            .Should()
-            .BeEquivalentTo(
-                expectedRetrievedPostByIdDto,
-                options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
+        ApplicationDbContext.Entry(post).State = EntityState.Detached;
+        Post actualRetrievedPost = (await ApplicationDbContext.Posts.FindAsync(post.Id))!;
+        actualRetrievedPost.Id.Should().Be(post.Id);
+        actualRetrievedPost.Title.ToString().Should().Be(expectedRetrievedPost[0]);
+        actualRetrievedPost.Content?.ToString().Should().Be(expectedRetrievedPost[1]);
+        actualRetrievedPost.ImagePath.Should().Be(expectedRetrievedPost[2]);
+        actualRetrievedPost.CreatedAtUtc.Should().BeCloseTo(post.CreatedAtUtc, TimeSpan.FromMilliseconds(1));
+        actualRetrievedPost.UpdatedAtUtc.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(100));
     }
 
     [Fact]
@@ -77,28 +80,21 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
 
         // Assert:
-        ProblemDetails? actualValidationProblemDetails = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
-        List<string>? actualErrors = ((JsonElement)actualValidationProblemDetails!.Extensions["errors"]!).Deserialize<List<string>>();
-        actualErrors.Should().BeEquivalentTo(expectedErrors);
-        actualValidationProblemDetails!.Extensions["traceId"].Should().NotBeNull();
-        actualValidationProblemDetails
-            .Should()
-            .BeEquivalentTo(
-                expectedProblemHttpResult.ProblemDetails,
-                options => options.Excluding(problemDetails => problemDetails.Extensions));
+        await AssertProblemDetailsAsync(httpResponseMessage, expectedErrors, expectedProblemHttpResult);
     }
 
     [Fact]
     public async Task UpdatePostByIdAsync_WhenUpdateFails_ShouldReturnProblemHttpResult()
     {
         // Arrange:
-        Guid postId = (await CreateAsync<CreatedPostDto>(
-            "{\"title\": \"Title\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
-            Constants.BasePostEndpoint)).Id;        ProblemHttpResult expectedProblemHttpResult = TypedResults.Problem(
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
+        await ApplicationDbContext.AddAsync(post);
+        await ApplicationDbContext.SaveChangesAsync();
+        ProblemHttpResult expectedProblemHttpResult = TypedResults.Problem(
             title: "One or more validation errors occurred.",
             statusCode: (int)HttpStatusCode.UnprocessableEntity);
         var expectedErrors = new List<string> { "The title cannot be empty." };
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, $"{Constants.BasePostEndpoint}/{postId}")
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, $"{Constants.BasePostEndpoint}/{post.Id}")
         {
             Content = new StringContent(
                 "{\"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
@@ -110,14 +106,6 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
 
         // Assert:
-        ProblemDetails? actualValidationProblemDetails = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
-        List<string>? actualErrors = ((JsonElement)actualValidationProblemDetails!.Extensions["errors"]!).Deserialize<List<string>>();
-        actualErrors.Should().BeEquivalentTo(expectedErrors);
-        actualValidationProblemDetails!.Extensions["traceId"].Should().NotBeNull();
-        actualValidationProblemDetails
-            .Should()
-            .BeEquivalentTo(
-                expectedProblemHttpResult.ProblemDetails,
-                options => options.Excluding(problemDetails => problemDetails.Extensions));
+        await AssertProblemDetailsAsync(httpResponseMessage, expectedErrors, expectedProblemHttpResult);
     }
 }

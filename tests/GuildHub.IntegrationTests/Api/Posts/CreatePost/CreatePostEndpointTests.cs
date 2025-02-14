@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace GuildHub.IntegrationTests.Api.Posts.CreatePost;
 
+[Collection(nameof(SharedDatabaseFixture))]
 public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
     : IntegrationTest(integrationTestsWebApplicationFactory)
 {
@@ -38,21 +41,10 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
     public async Task CreatePostAsync_WhenTitleIsValid_ShouldCreatePost()
     {
         // Arrange:
-        const string ExpectedTitle = "Title";
-        const string ExpectedContent = "Content";
-        const string ExpectedImagePath = "ImagePath";
-        var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
-            It.IsAny<Guid>(),
-            ExpectedTitle,
-            ExpectedContent,
-            ExpectedImagePath,
-            [],
-            It.IsAny<DateTime>(),
-            It.IsAny<DateTime?>());
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
         {
             Content = new StringContent(
-                $"{{\"title\": \"{ExpectedTitle}\", \"content\": \"{ExpectedContent}\", \"imagePath\": \"{ExpectedImagePath}\"}}",
+                "{\"title\": \"Title\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json)
         };
@@ -63,15 +55,15 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
         // Assert:
         httpResponseMessage.EnsureSuccessStatusCode();
         string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        Guid actualCreatedPostId = JsonSerializer.Deserialize<CreatedPostDto>(responseContent, JsonSerializerOptions)!.Id;
-        RetrievedPostByIdDto actualRetrievedPostByIdDto = await GetAsync<RetrievedPostByIdDto>($"{Constants.BasePostEndpoint}/{actualCreatedPostId}");
-        actualRetrievedPostByIdDto
-            .Should()
-            .BeEquivalentTo(
-                expectedRetrievedPostByIdDto,
-                options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
+        CreatedPostDto actualCreatedPostDto = JsonSerializer.Deserialize<CreatedPostDto>(responseContent, JsonSerializerOptions)!;
+        CreatedPostDto expectedCreatedPostDto = await ApplicationDbContext.Posts
+            .Where(post => post.Id == actualCreatedPostDto.Id)
+            .Select(post => new CreatedPostDto(
+                post.Id,
+                post.Title.ToString(),
+                post.Content!.ToString(),
+                post.ImagePath))
+            .SingleAsync();
+        actualCreatedPostDto.Should().BeEquivalentTo(expectedCreatedPostDto);
     }
 }

@@ -1,9 +1,9 @@
 namespace GuildHub.Api.Posts.GetPosts;
 
-public sealed class GetPostsHandler(IApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher)
+public sealed class GetPostsHandler(ApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher)
     : IRequestHandler<GetPostsDto, RetrievedPostsDto>
 {
-    private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
     private readonly IMapDispatcher _mapDispatcher = mapDispatcher;
 
     public async Task<Result<RetrievedPostsDto>> HandleAsync(GetPostsDto getPostsDto, CancellationToken cancellationToken)

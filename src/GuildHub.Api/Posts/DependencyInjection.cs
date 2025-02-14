@@ -28,11 +28,11 @@ public static class DependencyInjection
 
     private static void AddRequestHandlers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddTransient<IRequestHandler<CreatePostDto, CreatedPostDto>, CreatePostHandler>();
-        serviceCollection.AddTransient<IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>, GetPostByIdHandler>();
-        serviceCollection.AddTransient<IRequestHandler<GetPostsDto, RetrievedPostsDto>, GetPostsHandler>();
-        serviceCollection.AddTransient<IRequestHandler<DeletePostByIdDto>, DeletePostByIdHandler>();
-        serviceCollection.AddTransient<IRequestHandler<UpdatePostByIdRequest>, UpdatePostByIdHandler>();
+        serviceCollection.AddScoped<IRequestHandler<CreatePostDto, CreatedPostDto>, CreatePostHandler>();
+        serviceCollection.AddScoped<IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>, GetPostByIdHandler>();
+        serviceCollection.AddScoped<IRequestHandler<GetPostsDto, RetrievedPostsDto>, GetPostsHandler>();
+        serviceCollection.AddScoped<IRequestHandler<DeletePostByIdDto>, DeletePostByIdHandler>();
+        serviceCollection.AddScoped<IRequestHandler<UpdatePostByIdRequest>, UpdatePostByIdHandler>();
     }
 
     private static void AddMapHandlers(this IServiceCollection serviceCollection)

@@ -1,5 +1,8 @@
+using GuildHub.Api.Posts;
+
 namespace GuildHub.IntegrationTests.Api.Posts.DeletePostById;
 
+[Collection(nameof(SharedDatabaseFixture))]
 public sealed class DeletePostByIdEndpointTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
     : IntegrationTest(integrationTestsWebApplicationFactory)
 {
@@ -33,10 +36,10 @@ public sealed class DeletePostByIdEndpointTests(IntegrationTestsWebApplicationFa
     public async Task DeletePostByIdAsync_WhenPostExists_ShouldDeletePost()
     {
         // Arrange:
-        Guid postId = (await CreateAsync<CreatedPostDto>(
-            "{\"title\": \"Title\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
-            Constants.BasePostEndpoint)).Id;
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{Constants.BasePostEndpoint}/{postId}");
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
+        await ApplicationDbContext.Posts.AddAsync(post);
+        await ApplicationDbContext.SaveChangesAsync();
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{Constants.BasePostEndpoint}/{post.Id}");
 
         // Act:
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);

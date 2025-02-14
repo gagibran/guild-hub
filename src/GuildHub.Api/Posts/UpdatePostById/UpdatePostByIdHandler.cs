@@ -1,8 +1,8 @@
 namespace GuildHub.Api.Posts.UpdatePostById;
 
-public sealed class UpdatePostByIdHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<UpdatePostByIdRequest>
+public sealed class UpdatePostByIdHandler(ApplicationDbContext applicationDbContext) : IRequestHandler<UpdatePostByIdRequest>
 {
-    private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
 
     public async Task<Result> HandleAsync(UpdatePostByIdRequest updatePostByIdRequest, CancellationToken cancellationToken)
     {

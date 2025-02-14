@@ -1,8 +1,8 @@
 namespace GuildHub.Api.Posts.CreatePost;
 
-public sealed class CreatePostHandler(IApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher) : IRequestHandler<CreatePostDto, CreatedPostDto>
+public sealed class CreatePostHandler(ApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher) : IRequestHandler<CreatePostDto, CreatedPostDto>
 {
-    private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
     private readonly IMapDispatcher _mapDispatcher = mapDispatcher;
 
     public async Task<Result<CreatedPostDto>> HandleAsync(CreatePostDto createPostDto, CancellationToken cancellationToken)

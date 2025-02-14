@@ -3,7 +3,6 @@ using GuildHub.Api.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
 namespace GuildHub.IntegrationTests;
@@ -16,18 +15,25 @@ public sealed class IntegrationTestsWebApplicationFactory : WebApplicationFactor
     {
         _postgreSqlContainer = new PostgreSqlBuilder()
             .WithImage("postgres:16")
+            .WithName("guild-hub-integration-tests")
             .WithDatabase("GuildHub")
             .WithUsername("admin")
             .WithPassword("admin")
             .Build();
     }
 
-    async Task IAsyncLifetime.InitializeAsync()
+    public async Task InitializeAsync()
     {
         await _postgreSqlContainer.StartAsync();
         using IServiceScope serviceScope = Services.CreateScope();
-        var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        await dbContext.Database.MigrateAsync();
+        var applicationDbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await applicationDbContext.Database.MigrateAsync();
+        await applicationDbContext.Database.EnsureCreatedAsync();
+    }
+
+    public async new Task DisposeAsync()
+    {
+        await _postgreSqlContainer.DisposeAsync();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder webHostBuilder)
@@ -45,10 +51,5 @@ public sealed class IntegrationTestsWebApplicationFactory : WebApplicationFactor
                 dbContextOptionsBuilder.UseNpgsql(_postgreSqlContainer.GetConnectionString());
             });
         });
-    }
-
-    async Task IAsyncLifetime.DisposeAsync()
-    {
-        await _postgreSqlContainer.DisposeAsync();
     }
 }

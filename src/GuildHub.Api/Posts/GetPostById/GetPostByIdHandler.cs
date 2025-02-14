@@ -1,8 +1,8 @@
 namespace GuildHub.Api.Posts.GetPostById;
 
-public sealed class GetPostByIdHandler(IApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher) : IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>
+public sealed class GetPostByIdHandler(ApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher) : IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>
 {
-    private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
     private readonly IMapDispatcher _mapDispatcher = mapDispatcher;
 
     public async Task<Result<RetrievedPostByIdDto>> HandleAsync(GetPostByIdDto getPostByIdDto, CancellationToken cancellationToken)

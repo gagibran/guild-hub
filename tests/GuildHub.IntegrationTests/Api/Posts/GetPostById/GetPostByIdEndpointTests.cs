@@ -1,5 +1,6 @@
 namespace GuildHub.IntegrationTests.Api.Posts.GetPostById;
 
+[Collection(nameof(SharedDatabaseFixture))]
 public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
     : IntegrationTest(integrationTestsWebApplicationFactory)
 {
@@ -18,51 +19,35 @@ public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFacto
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
 
         // Assert:
-        ProblemDetails? actualValidationProblemDetails = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
-        List<string>? actualErrors = ((JsonElement)actualValidationProblemDetails!.Extensions["errors"]!).Deserialize<List<string>>();
-        actualErrors.Should().BeEquivalentTo(expectedErrors);
-        actualValidationProblemDetails!.Extensions["traceId"].Should().NotBeNull();
-        actualValidationProblemDetails
-            .Should()
-            .BeEquivalentTo(
-                expectedProblemHttpResult.ProblemDetails,
-                options => options.Excluding(problemDetails => problemDetails.Extensions));
+        await AssertProblemDetailsAsync(httpResponseMessage, expectedErrors, expectedProblemHttpResult);
     }
 
     [Fact]
     public async Task GetPostByIdAsync_WhenPostExists_ShouldReturnPost()
     {
         // Arrange:
-        const string ExpectedTitle = "Title";
-        const string ExpectedContent = "Content";
-        const string ExpectedImagePath = "ImagePath";
-        Guid postId = (await CreateAsync<CreatedPostDto>(
-            $"{{\"title\": \"{ExpectedTitle}\", \"content\": \"{ExpectedContent}\", \"imagePath\": \"{ExpectedImagePath}\"}}",
-            Constants.BasePostEndpoint)).Id;
+        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
         var expectedRetrievedPostByIdDto = new RetrievedPostByIdDto(
-            It.IsAny<Guid>(),
-            ExpectedTitle,
-            ExpectedContent,
-            ExpectedImagePath,
-            [],
-            It.IsAny<DateTime>(),
-            It.IsAny<DateTime?>());
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}/{postId}");
+            post.Id,
+            post.Title.ToString(),
+            post.Content!.ToString(),
+            post.ImagePath,
+            [
+                .. post.PostReplies.Select(postReply => new RetrievedPostReplyForPostDto(
+                    postReply.Content.ToString(),
+                    postReply.ImagePath,
+                    postReply.CreatedAtUtc))
+            ],
+            post.CreatedAtUtc,
+            post.UpdatedAtUtc);
+        await ApplicationDbContext.Posts.AddAsync(post);
+        await ApplicationDbContext.SaveChangesAsync();
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}/{post.Id}");
 
         // Act:
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
 
         // Assert:
-        httpResponseMessage.EnsureSuccessStatusCode();
-        string responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-        RetrievedPostByIdDto? actualRetrievedPostByIdDto = JsonSerializer.Deserialize<RetrievedPostByIdDto>(responseContent, JsonSerializerOptions);
-        actualRetrievedPostByIdDto
-            .Should()
-            .BeEquivalentTo(
-                expectedRetrievedPostByIdDto,
-                options => options
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.CreatedAtUtc)
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.UpdatedAtUtc)
-                    .Excluding(retrievedPostByIdDtos => retrievedPostByIdDtos.Id));
+        await AssertModelWithoutDateAuditsAsync(httpResponseMessage, expectedRetrievedPostByIdDto);
     }
 }

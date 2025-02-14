@@ -17,7 +17,6 @@ public class Program
         {
             dbContextOptionsBuilder.UseNpgsql(webApplicationBuilder.Configuration.GetConnectionString("Application"));
         });
-        webApplicationBuilder.Services.AddScoped<IApplicationDbContext>(serviceProvider => serviceProvider.GetRequiredService<ApplicationDbContext>());
         webApplicationBuilder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         webApplicationBuilder.Services.AddCommonServices();
         webApplicationBuilder.Services.AddPostServices();

@@ -1,8 +1,8 @@
 namespace GuildHub.Api.Posts.PostReplies.CreatePostReply;
 
-public sealed class CreatePostReplyHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<CreatePostReplyRequest>
+public sealed class CreatePostReplyHandler(ApplicationDbContext applicationDbContext) : IRequestHandler<CreatePostReplyRequest>
 {
-    private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
 
     public async Task<Result> HandleAsync(CreatePostReplyRequest createPostReplyDto, CancellationToken cancellationToken)
     {
