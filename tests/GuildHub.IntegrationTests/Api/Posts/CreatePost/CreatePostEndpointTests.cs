@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace GuildHub.IntegrationTests.Api.Posts.CreatePost;
 
 [Collection(nameof(SharedDatabaseFixture))]

@@ -2,7 +2,6 @@ using GuildHub.Api;
 using GuildHub.Api.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
 
 namespace GuildHub.IntegrationTests;

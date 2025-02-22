@@ -27,7 +27,7 @@ public sealed class Content : ValueObject
     {
         if (string.IsNullOrWhiteSpace(content))
         {
-            return Result<Content>.Fail($"The content message cannot be null nor empty.");
+            return Result<Content>.Fail("The content message cannot be null nor empty.");
         }
         return BuildNullable(content)!;
     }

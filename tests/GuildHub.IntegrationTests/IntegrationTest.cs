@@ -1,5 +1,4 @@
 using GuildHub.Api.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace GuildHub.IntegrationTests;
 
