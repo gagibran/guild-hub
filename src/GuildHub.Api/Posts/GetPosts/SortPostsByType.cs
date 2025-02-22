@@ -1,6 +1,6 @@
 namespace GuildHub.Api.Posts.GetPosts;
 
-public enum SortByType
+public enum SortPostsByType
 {
     None,
     Date,

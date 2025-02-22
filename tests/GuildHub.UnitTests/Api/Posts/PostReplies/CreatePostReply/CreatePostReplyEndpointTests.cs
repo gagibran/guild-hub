@@ -13,12 +13,15 @@ public class CreatePostReplyEndpointTests
     public async Task CreatePostReplyAsync_WhenRequestDispatcherReturnsSuccessfulResult_ShouldReturnCreated()
     {
         // Arrange:
+        var createdPostReplyDto = new CreatedPostReplyDto(Guid.NewGuid(), "Content", "ImagePath");
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync(It.IsAny<CreatePostReplyRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result.Succeed());
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostReplyRequest, CreatedPostReplyDto>(
+                It.IsAny<CreatePostReplyRequest>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result<CreatedPostReplyDto>.Succeed(createdPostReplyDto));
 
         // Act:
-        Results<ProblemHttpResult, Created> actualResult = await CreatePostReplyEndpoint.CreatePostReplyAsync(
+        Results<ProblemHttpResult, Created<CreatedPostReplyDto>> actualResult = await CreatePostReplyEndpoint.CreatePostReplyAsync(
             _requestDispatcherMock.Object,
             It.IsAny<HttpContext>(),
             It.IsAny<Guid>(),
@@ -26,7 +29,7 @@ public class CreatePostReplyEndpointTests
             It.IsAny<CancellationToken>());
 
         // Assert:
-        actualResult.Result.Should().BeOfType<Created>();
+        actualResult.Result.As<Created<CreatedPostReplyDto>>().Value.Should().BeEquivalentTo(createdPostReplyDto);
     }
 
     [Fact]
@@ -49,11 +52,13 @@ public class CreatePostReplyEndpointTests
                 { "traceId", ExpectedTracerIdentifier }
             });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync(It.IsAny<CreatePostReplyRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result.Fail(expectedErrorMessage));
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostReplyRequest, CreatedPostReplyDto>(
+                It.IsAny<CreatePostReplyRequest>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result<CreatedPostReplyDto>.Fail(expectedErrorMessage));
 
         // Act:
-        Results<ProblemHttpResult, Created> actualResult = await CreatePostReplyEndpoint.CreatePostReplyAsync(
+        Results<ProblemHttpResult, Created<CreatedPostReplyDto>> actualResult = await CreatePostReplyEndpoint.CreatePostReplyAsync(
             _requestDispatcherMock.Object,
             defaultHttpContext,
             postId,
@@ -83,11 +88,13 @@ public class CreatePostReplyEndpointTests
                 { "traceId", ExpectedTracerIdentifier }
             });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync(It.IsAny<CreatePostReplyRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result.Fail(ExpectedErrorMessage));
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostReplyRequest, CreatedPostReplyDto>(
+                It.IsAny<CreatePostReplyRequest>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result<CreatedPostReplyDto>.Fail(ExpectedErrorMessage));
 
         // Act:
-        Results<ProblemHttpResult, Created> actualResult = await CreatePostReplyEndpoint.CreatePostReplyAsync(
+        Results<ProblemHttpResult, Created<CreatedPostReplyDto>> actualResult = await CreatePostReplyEndpoint.CreatePostReplyAsync(
             _requestDispatcherMock.Object,
             defaultHttpContext,
             It.IsAny<Guid>(),

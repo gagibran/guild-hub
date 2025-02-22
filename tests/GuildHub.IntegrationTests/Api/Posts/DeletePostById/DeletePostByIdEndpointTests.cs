@@ -1,5 +1,3 @@
-using GuildHub.Api.Posts;
-
 namespace GuildHub.IntegrationTests.Api.Posts.DeletePostById;
 
 [Collection(nameof(SharedDatabaseFixture))]

@@ -28,14 +28,14 @@ public sealed class CreatePostEndpointTests
                 { "traceId", ExpectedTracerIdentifier }
             });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(It.IsAny<CreatePostDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostRequest, CreatedPostDto>(It.IsAny<CreatePostRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<CreatedPostDto>.Fail(ExpectedErrorMessage));
 
         // Act:
         Results<ProblemHttpResult, CreatedAtRoute<CreatedPostDto>> actualResult = await CreatePostEndpoint.CreatePostAsync(
             _requestDispatcherMock.Object,
             defaultHttpContext,
-            It.IsAny<CreatePostDto>(),
+            It.IsAny<CreatePostRequest>(),
             It.IsAny<CancellationToken>());
 
         // Assert:
@@ -52,14 +52,14 @@ public sealed class CreatePostEndpointTests
             nameof(GetPostByIdEndpoint.GetPostByIdAsync),
             new { expectedCreatedPostDto.Id });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(It.IsAny<CreatePostDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<CreatePostRequest, CreatedPostDto>(It.IsAny<CreatePostRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<CreatedPostDto>.Succeed(expectedCreatedPostDto));
 
         // Act:
         Results<ProblemHttpResult, CreatedAtRoute<CreatedPostDto>> actualResult = await CreatePostEndpoint.CreatePostAsync(
             _requestDispatcherMock.Object,
             It.IsAny<HttpContext>(),
-            It.IsAny<CreatePostDto>(),
+            It.IsAny<CreatePostRequest>(),
             It.IsAny<CancellationToken>());
 
         // Assert:

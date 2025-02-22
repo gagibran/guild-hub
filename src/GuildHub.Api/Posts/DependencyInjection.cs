@@ -28,16 +28,15 @@ public static class DependencyInjection
 
     private static void AddRequestHandlers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IRequestHandler<CreatePostDto, CreatedPostDto>, CreatePostHandler>();
-        serviceCollection.AddScoped<IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>, GetPostByIdHandler>();
-        serviceCollection.AddScoped<IRequestHandler<GetPostsDto, RetrievedPostsDto>, GetPostsHandler>();
-        serviceCollection.AddScoped<IRequestHandler<DeletePostByIdDto>, DeletePostByIdHandler>();
+        serviceCollection.AddScoped<IRequestHandler<CreatePostRequest, CreatedPostDto>, CreatePostHandler>();
+        serviceCollection.AddScoped<IRequestHandler<GetPostByIdRequest, RetrievedPostByIdDto>, GetPostByIdHandler>();
+        serviceCollection.AddScoped<IRequestHandler<GetPostsRequest, RetrievedPostsDto>, GetPostsHandler>();
+        serviceCollection.AddScoped<IRequestHandler<DeletePostByIdRequest>, DeletePostByIdHandler>();
         serviceCollection.AddScoped<IRequestHandler<UpdatePostByIdRequest>, UpdatePostByIdHandler>();
     }
 
     private static void AddMapHandlers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddTransient<IMapHandler<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>, PostRepliesToRetrievedPostRepliesForPostDtoMapper>();
         serviceCollection.AddTransient<IMapHandler<Post, RetrievedPostByIdDto>, PostToRetrievedPostByIdDtoMapper>();
         serviceCollection.AddTransient<IMapHandler<Post, CreatedPostDto>, PostToCreatedPostDtoMapper>();
         serviceCollection.AddTransient<IMapHandler<PagedList<Post>, RetrievedPostsDto>, PagedPostsToRetrievedPostsDtoMapper>();

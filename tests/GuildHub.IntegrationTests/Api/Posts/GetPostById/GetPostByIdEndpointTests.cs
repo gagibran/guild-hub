@@ -32,12 +32,7 @@ public sealed class GetPostByIdEndpointTests(IntegrationTestsWebApplicationFacto
             post.Title.ToString(),
             post.Content!.ToString(),
             post.ImagePath,
-            [
-                .. post.PostReplies.Select(postReply => new RetrievedPostReplyForPostDto(
-                    postReply.Content.ToString(),
-                    postReply.ImagePath,
-                    postReply.CreatedAtUtc))
-            ],
+            $"http://localhost/api/posts/{post.Id}/replies",
             post.CreatedAtUtc,
             post.UpdatedAtUtc);
         await ApplicationDbContext.Posts.AddAsync(post);

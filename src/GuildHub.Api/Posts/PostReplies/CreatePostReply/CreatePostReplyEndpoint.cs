@@ -2,7 +2,7 @@ namespace GuildHub.Api.Posts.PostReplies.CreatePostReply;
 
 public static class CreatePostReplyEndpoint
 {
-    public static async Task<Results<ProblemHttpResult, Created>> CreatePostReplyAsync(
+    public static async Task<Results<ProblemHttpResult, Created<CreatedPostReplyDto>>> CreatePostReplyAsync(
         IRequestDispatcher dispatcher,
         HttpContext httpContext,
         Guid postId,
@@ -10,15 +10,17 @@ public static class CreatePostReplyEndpoint
         CancellationToken cancellationToken = default)
     {
         var createPostReplyRequest = new CreatePostReplyRequest(postId, createPostReplyDto.Content, createPostReplyDto.ImagePath);
-        Result createPostReplyResult = await dispatcher.DispatchRequestAsync(createPostReplyRequest, cancellationToken);
-        if (createPostReplyResult.IsSuccess)
+        Result<CreatedPostReplyDto> createdPostReplyDtoResult = await dispatcher.DispatchRequestAsync<CreatePostReplyRequest, CreatedPostReplyDto>(
+            createPostReplyRequest,
+            cancellationToken);
+        if (createdPostReplyDtoResult.IsSuccess)
         {
-            return TypedResults.Created();
+            return TypedResults.Created((string?)null, createdPostReplyDtoResult.Value);
         }
-        if (createPostReplyResult.Errors.Contains($"No post with the ID '{postId}' was found."))
+        if (createdPostReplyDtoResult.Errors.Contains($"No post with the ID '{postId}' was found."))
         {
-            return ApiHelper.CreateProblemDetails(HttpStatusCode.NotFound, createPostReplyResult.Errors, httpContext);
+            return ApiHelper.CreateProblemDetails(HttpStatusCode.NotFound, createdPostReplyDtoResult.Errors, httpContext);
         }
-        return ApiHelper.CreateProblemDetails(HttpStatusCode.UnprocessableEntity, createPostReplyResult.Errors, httpContext);
+        return ApiHelper.CreateProblemDetails(HttpStatusCode.UnprocessableEntity, createdPostReplyDtoResult.Errors, httpContext);
     }
 }

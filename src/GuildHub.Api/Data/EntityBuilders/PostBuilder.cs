@@ -8,7 +8,7 @@ public sealed class PostBuilder : IEntityTypeConfiguration<Post>
             .ToTable("Posts")
             .HasKey(post => post.Id);
         postBuilder
-            .Property(item => item.SearchTsVector)
+            .Property(postReply => postReply.SearchTsVector)
             .HasComputedColumnSql("to_tsvector('english', coalesce(\"Title\", '') || ' ' || coalesce(\"Content\", ''))", true);
         postBuilder
             .HasIndex(post => post.SearchTsVector)

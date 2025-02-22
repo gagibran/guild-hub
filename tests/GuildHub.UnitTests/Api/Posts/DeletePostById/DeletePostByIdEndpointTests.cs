@@ -28,7 +28,7 @@ public sealed class DeletePostByIdEndpointTests
                 { "traceId", ExpectedTracerIdentifier }
             });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync(It.IsAny<DeletePostByIdDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync(It.IsAny<DeletePostByIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Fail(ExpectedErrorMessage));
 
         // Act:
@@ -47,7 +47,7 @@ public sealed class DeletePostByIdEndpointTests
     {
         // Arrange:
         _requestDispatcherMock
-            .Setup(dispatcher => dispatcher.DispatchRequestAsync(It.IsAny<DeletePostByIdDto>(), It.IsAny<CancellationToken>()))
+            .Setup(dispatcher => dispatcher.DispatchRequestAsync(It.IsAny<DeletePostByIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Succeed());
 
         // Act:

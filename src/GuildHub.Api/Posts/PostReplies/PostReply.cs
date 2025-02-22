@@ -5,18 +5,21 @@ public sealed class PostReply : Entity
     public Post Post { get; }
     public Content Content { get; }
     public string? ImagePath { get; }
+    public NpgsqlTsVector SearchTsVector { get; }
 
     private PostReply(Post post, Content content, string? imagePath)
     {
         Post = post;
         Content = content;
         ImagePath = imagePath;
+        SearchTsVector = null!;
     }
 
     private PostReply()
     {
         Post = null!;
         Content = null!;
+        SearchTsVector = null!;
     }
 
     public static Result<PostReply> Build(Post post, string content, string? imagePath)

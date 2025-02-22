@@ -28,7 +28,7 @@ public sealed class GetPostByIdEndpointTests
                 { "traceId", ExpectedTracerIdentifier }
             });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdDto, RetrievedPostByIdDto>(It.IsAny<GetPostByIdDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdRequest, RetrievedPostByIdDto>(It.IsAny<GetPostByIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<RetrievedPostByIdDto>.Fail(ExpectedErrorMessage));
 
         // Act:
@@ -51,15 +51,12 @@ public sealed class GetPostByIdEndpointTests
             "Title",
             "Content",
             "ImagePath",
-            [
-                new("Message1", "ImagePath1", new DateTime(2020, 1, 1)),
-                new("Message2", "ImagePath2", new DateTime(2020, 1, 2))
-            ],
+            "GetRepliesEndpoint",
             new DateTime(2020, 1, 1),
             new DateTime(2022, 4, 6));
         Ok<RetrievedPostByIdDto> expectedOk = TypedResults.Ok(expectedRetrievedPostByIdDto);
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdDto, RetrievedPostByIdDto>(It.IsAny<GetPostByIdDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostByIdRequest, RetrievedPostByIdDto>(It.IsAny<GetPostByIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<RetrievedPostByIdDto>.Succeed(expectedRetrievedPostByIdDto));
 
         // Act:

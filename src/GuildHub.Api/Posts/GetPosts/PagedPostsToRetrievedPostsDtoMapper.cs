@@ -1,8 +1,10 @@
 namespace GuildHub.Api.Posts.GetPosts;
 
-public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispatcher) : IMapHandler<PagedList<Post>, RetrievedPostsDto>
+public sealed class PagedPostsToRetrievedPostsDtoMapper(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+    : IMapHandler<PagedList<Post>, RetrievedPostsDto>
 {
-    public readonly IMapDispatcher _mapDispatcher = mapDispatcher;
+    private readonly LinkGenerator _linkGenerator = linkGenerator;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public RetrievedPostsDto Map(PagedList<Post> pagedPosts)
     {
@@ -13,7 +15,10 @@ public sealed class PagedPostsToRetrievedPostsDtoMapper(IMapDispatcher mapDispat
                     post.Title.ToString(),
                     post.Content?.ToString(),
                     post.ImagePath,
-                    _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies),
+                    _linkGenerator.GetUriByName(
+                        _httpContextAccessor.HttpContext!,
+                        nameof(GetPostRepliesEndpoint.GetPostRepliesAsync),
+                        new { postId = post.Id })!,
                     post.CreatedAtUtc,
                     post.UpdatedAtUtc))
             ],

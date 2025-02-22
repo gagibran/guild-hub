@@ -1,47 +1,49 @@
 namespace GuildHub.Api.Posts.GetPosts;
 
 public sealed class GetPostsHandler(ApplicationDbContext applicationDbContext, IMapDispatcher mapDispatcher)
-    : IRequestHandler<GetPostsDto, RetrievedPostsDto>
+    : IRequestHandler<GetPostsRequest, RetrievedPostsDto>
 {
     private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
     private readonly IMapDispatcher _mapDispatcher = mapDispatcher;
 
-    public async Task<Result<RetrievedPostsDto>> HandleAsync(GetPostsDto getPostsDto, CancellationToken cancellationToken)
+    public async Task<Result<RetrievedPostsDto>> HandleAsync(GetPostsRequest getPostsRequest, CancellationToken cancellationToken)
     {
-        IQueryable<Post> posts = _applicationDbContext.Posts.Include(post => post.PostReplies);
-        var isQueryNullOrWhitespace = string.IsNullOrWhiteSpace(getPostsDto.Query);
-        if (!isQueryNullOrWhitespace)
-        {
-            posts = posts
-                .Where(post => post.SearchTsVector.Matches(EF.Functions.PhraseToTsQuery("english", getPostsDto.Query!)))
-                .Select(post => post);
-        }
-        if(!Enum.TryParse(getPostsDto.SortBy, true, out SortByType sortByType))
+        string sortBy = getPostsRequest.QueryParameters.SortBy ?? SortPostsByType.None.ToString();
+        if(!Enum.TryParse(sortBy, true, out SortPostsByType sortPostsByType))
         {
             return Result<RetrievedPostsDto>.Fail(
-                $"Cannot sort by '{getPostsDto.SortBy}'. The valid options are: [{string.Join(", ", Enum.GetNames<SortByType>())}].");
+                $"Cannot sort by '{sortBy}'. The valid options are: [{string.Join(", ", Enum.GetNames<SortPostsByType>())}].");
         }
-        if (isQueryNullOrWhitespace
-            && (sortByType == SortByType.Relevance || sortByType == SortByType.RelevanceAsc || sortByType == SortByType.Hot))
+        string? search = getPostsRequest.QueryParameters.Search;
+        bool isSearchValid = !string.IsNullOrWhiteSpace(search);
+        IQueryable<Post> posts = _applicationDbContext.Posts;
+        if (isSearchValid)
         {
-            return Result<RetrievedPostsDto>.Fail($"Cannot sort by '{sortByType}' without a search query.");
+            posts = posts
+                .Where(post => post.SearchTsVector.Matches(EF.Functions.PhraseToTsQuery("english", search!)))
+                .Select(post => post);
         }
-        posts = sortByType switch
+        if (!isSearchValid
+            && (sortPostsByType == SortPostsByType.Relevance || sortPostsByType == SortPostsByType.RelevanceAsc || sortPostsByType == SortPostsByType.Hot))
         {
-            SortByType.Relevance => posts.OrderByDescending(post => post.SearchTsVector.Rank(EF.Functions.PhraseToTsQuery("english", getPostsDto.Query!))),
-            SortByType.RelevanceAsc => posts.OrderBy(post => post.SearchTsVector.Rank(EF.Functions.PhraseToTsQuery("english", getPostsDto.Query!))),
-            SortByType.Date => posts.OrderByDescending(post => post.CreatedAtUtc),
-            SortByType.DateAsc => posts.OrderBy(post => post.CreatedAtUtc),
-            SortByType.Hot => posts
+            return Result<RetrievedPostsDto>.Fail($"Cannot sort by '{sortPostsByType}' without a search term.");
+        }
+        posts = sortPostsByType switch
+        {
+            SortPostsByType.Relevance => posts.OrderByDescending(post => post.SearchTsVector.Rank(EF.Functions.PhraseToTsQuery("english", search!))),
+            SortPostsByType.RelevanceAsc => posts.OrderBy(post => post.SearchTsVector.Rank(EF.Functions.PhraseToTsQuery("english", search!))),
+            SortPostsByType.Date => posts.OrderByDescending(post => post.CreatedAtUtc),
+            SortPostsByType.DateAsc => posts.OrderBy(post => post.CreatedAtUtc),
+            SortPostsByType.Hot => posts
                 .OrderByDescending(post => post.CreatedAtUtc)
                 .ThenByDescending(post => post.PostReplies.Count)
-                .ThenByDescending(post => post.SearchTsVector.Rank(EF.Functions.PhraseToTsQuery("english", getPostsDto.Query!))),
+                .ThenByDescending(post => post.SearchTsVector.Rank(EF.Functions.PhraseToTsQuery("english", search!))),
             _ => posts
         };
         PagedList<Post> pagedPosts = await PagedList<Post>.BuildAsync(
             posts,
-            getPostsDto.CurrentPageIndex,
-            getPostsDto.PostsPerPage,
+            getPostsRequest.QueryParameters.CurrentPageIndex,
+            getPostsRequest.QueryParameters.EntitiesPerPage,
             cancellationToken);
         RetrievedPostsDto retrievedPostByIdDtos = _mapDispatcher.DispatchMap<PagedList<Post>, RetrievedPostsDto>(pagedPosts);
         return Result<RetrievedPostsDto>.Succeed(retrievedPostByIdDtos);

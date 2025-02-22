@@ -10,8 +10,4 @@
   <ItemGroup>
     <ProjectReference Include="..\GuildHub.Common\GuildHub.Common.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Posts\DeletePostById\" />
-  </ItemGroup>
 </Project>

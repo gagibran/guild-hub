@@ -28,17 +28,14 @@ public class GetPostsEndpointTests
                 { "traceId", ExpectedTracerIdentifier }
             });
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostsDto, RetrievedPostsDto>(It.IsAny<GetPostsDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostsRequest, RetrievedPostsDto>(It.IsAny<GetPostsRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<RetrievedPostsDto>.Fail(ExpectedErrorMessage));
 
         // Act:
         Results<ProblemHttpResult, Ok<List<RetrievedPostByIdDto>>> actualResult = await GetPostsEndpoint.GetPostsAsync(
-            It.IsAny<string?>(),
-            It.IsAny<int?>(),
-            It.IsAny<int?>(),
+            It.IsAny<QueryParameters>(),
             _requestDispatcherMock.Object,
             defaultHttpContext,
-            It.IsAny<string>(),
             It.IsAny<CancellationToken>());
 
         // Assert:
@@ -59,10 +56,7 @@ public class GetPostsEndpointTests
                 "Title",
                 "Content",
                 "ImagePath",
-                [
-                    new("Message", "ImagePath", new DateTime(2023, 2, 3)),
-                    new("Message2", "ImagePath2", new DateTime(2024, 2, 3))
-                ],
+                "GetRepliesEndpoint",
                 new DateTime(2022, 2, 3),
                 new DateTime(2023, 2, 3)),
             new(
@@ -70,10 +64,7 @@ public class GetPostsEndpointTests
                 "Title2",
                 "Content2",
                 "ImagePath2",
-                [
-                    new("Message3", "ImagePath3", new DateTime(2024, 2, 3)),
-                    new("Message4", "ImagePath4", new DateTime(2024, 10, 3))
-                ],
+                "GetRepliesEndpoint",
                 new DateTime(2021, 2, 3),
                 null),
             new(
@@ -81,10 +72,7 @@ public class GetPostsEndpointTests
                 "Title3",
                 "Content3",
                 "ImagePath3",
-                [
-                    new("Message5", "ImagePath5", new DateTime(2022, 8, 24)),
-                    new("Message6", "ImagePath6", new DateTime(2022, 11, 2))
-                ],
+                "GetRepliesEndpoint",
                 new DateTime(2021, 2, 3),
                 new DateTime(2022, 2, 3))
         };
@@ -98,17 +86,14 @@ public class GetPostsEndpointTests
             expectedPagesCount);
         Ok<List<RetrievedPostByIdDto>> expectedResult = TypedResults.Ok(retrievedPosts);
         _requestDispatcherMock
-            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostsDto, RetrievedPostsDto>(It.IsAny<GetPostsDto>(), It.IsAny<CancellationToken>()))
+            .Setup(requestDispatcher => requestDispatcher.DispatchRequestAsync<GetPostsRequest, RetrievedPostsDto>(It.IsAny<GetPostsRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<RetrievedPostsDto>.Succeed(retrievedPostsDto));
 
         // Act:
         Results<ProblemHttpResult, Ok<List<RetrievedPostByIdDto>>> actualResult = await GetPostsEndpoint.GetPostsAsync(
-            It.IsAny<string?>(),
-            It.IsAny<int?>(),
-            It.IsAny<int?>(),
+            It.IsAny<QueryParameters>(),
             _requestDispatcherMock.Object,
             defaultHttpContext,
-            It.IsAny<string>(),
             It.IsAny<CancellationToken>());
 
         // Assert:

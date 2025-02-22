@@ -36,6 +36,7 @@ namespace GuildHub.Api.Data.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     PostId = table.Column<Guid>(type: "uuid", nullable: false),
                     ImagePath = table.Column<string>(type: "text", nullable: true),
+                    SearchTsVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: false, computedColumnSql: "to_tsvector('english', coalesce(\"Content\", ''))", stored: true),
                     Content = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -55,6 +56,12 @@ namespace GuildHub.Api.Data.Migrations
                 name: "IX_PostReplies_PostId",
                 table: "PostReplies",
                 column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostReplies_SearchTsVector",
+                table: "PostReplies",
+                column: "SearchTsVector")
+                .Annotation("Npgsql:IndexMethod", "GIN");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_SearchTsVector",

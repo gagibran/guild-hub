@@ -3,10 +3,17 @@ namespace GuildHub.IntegrationTests.Api.Posts.GetPostById;
 [Collection(nameof(SharedDatabaseFixture))]
 public sealed class GetPostByIdHandlerTests : IntegrationTest
 {
-    private readonly IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto> _getPostByIdHandler;
+    private readonly IRequestHandler<GetPostByIdRequest, RetrievedPostByIdDto> _getPostByIdHandler;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
     public GetPostByIdHandlerTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory) : base(integrationTestsWebApplicationFactory)
     {
-        _getPostByIdHandler = ServiceProvider.GetRequiredService<IRequestHandler<GetPostByIdDto, RetrievedPostByIdDto>>();
+        _getPostByIdHandler = ServiceProvider.GetRequiredService<IRequestHandler<GetPostByIdRequest, RetrievedPostByIdDto>>();
+        _httpContextAccessor = ServiceProvider.GetRequiredService<IHttpContextAccessor>();
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Scheme = "http";
+        httpContext.Request.Host = new HostString("localhost");
+        _httpContextAccessor.HttpContext = httpContext;
     }
 
     [Fact]
@@ -35,13 +42,7 @@ public sealed class GetPostByIdHandlerTests : IntegrationTest
             post.Title.ToString(),
             post.Content!.ToString(),
             post.ImagePath,
-            [
-                ..
-                post.PostReplies.Select(postReply => new RetrievedPostReplyForPostDto(
-                    postReply.Content.ToString(),
-                    postReply.ImagePath,
-                    postReply.CreatedAtUtc))
-            ],
+            $"http://localhost/api/posts/{post.Id}/replies",
             post.CreatedAtUtc,
             post.UpdatedAtUtc));
 

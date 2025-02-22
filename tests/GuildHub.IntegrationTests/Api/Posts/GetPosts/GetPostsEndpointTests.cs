@@ -19,14 +19,14 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
         return new()
         {
             {
-                "currentPageIndex=2&postsPerPage=2",
+                "currentPageIndex=2&entitiesPerPage=2",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[2]),
                     MapPostToRetrievedPostByIdDto(s_posts[3])
                 ]
             },
             {
-                "currentPageIndex=1&postsPerPage=3",
+                "currentPageIndex=1&entitiesPerPage=3",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -34,22 +34,13 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "currentPageIndex=2&postsPerPage=3",
+                "currentPageIndex=2&entitiesPerPage=3",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[3])
                 ]
             },
             {
-                "currentPageIndex=1&postsPerPage=4",
-                [
-                    MapPostToRetrievedPostByIdDto(s_posts[0]),
-                    MapPostToRetrievedPostByIdDto(s_posts[1]),
-                    MapPostToRetrievedPostByIdDto(s_posts[2]),
-                    MapPostToRetrievedPostByIdDto(s_posts[3])
-                ]
-            },
-            {
-                "currentPageIndex=100&postsPerPage=4",
+                "currentPageIndex=1&entitiesPerPage=4",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -58,19 +49,28 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "currentPageIndex=1&postsPerPage=1",
+                "currentPageIndex=100&entitiesPerPage=4",
+                [
+                    MapPostToRetrievedPostByIdDto(s_posts[0]),
+                    MapPostToRetrievedPostByIdDto(s_posts[1]),
+                    MapPostToRetrievedPostByIdDto(s_posts[2]),
+                    MapPostToRetrievedPostByIdDto(s_posts[3])
+                ]
+            },
+            {
+                "currentPageIndex=1&entitiesPerPage=1",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0])
                 ]
             },
             {
-                "currentPageIndex=200&postsPerPage=1",
+                "currentPageIndex=200&entitiesPerPage=1",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[3])
                 ]
             },
             {
-                "currentPageIndex=-2&postsPerPage=57",
+                "currentPageIndex=-2&entitiesPerPage=57",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -79,7 +79,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "currentPageIndex=0&postsPerPage=3",
+                "currentPageIndex=0&entitiesPerPage=3",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -87,7 +87,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "currentPageIndex=2&postsPerPage=99",
+                "currentPageIndex=2&entitiesPerPage=99",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -96,26 +96,26 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "postsPerPage=-4",
+                "entitiesPerPage=-4",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0])
                 ]
             },
             {
-                "postsPerPage=0",
+                "entitiesPerPage=0",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0])
                 ]
             },
             {
-                "postsPerPage=2",
+                "entitiesPerPage=2",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1])
                 ]
             },
             {
-                "postsPerPage=242",
+                "entitiesPerPage=242",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -158,7 +158,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "sortBy=relevance&query=mage",
+                "sortBy=relevance&search=mage",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
@@ -166,7 +166,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "sortBy=relevanceasc&query=mage",
+                "sortBy=relevanceasc&search=mage",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[3]),
                     MapPostToRetrievedPostByIdDto(s_posts[0]),
@@ -174,21 +174,21 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
                 ]
             },
             {
-                "sortBy=relevanceasc&query=warrior",
+                "sortBy=relevanceasc&search=warrior",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[3]),
                     MapPostToRetrievedPostByIdDto(s_posts[2])
                 ]
             },
             {
-                "sortBy=relevance&query=warrior",
+                "sortBy=relevance&search=warrior",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[2]),
                     MapPostToRetrievedPostByIdDto(s_posts[3])
                 ]
             },
             {
-                "sortBy=hot&query=mage",
+                "sortBy=hot&search=mage",
                 [
                     MapPostToRetrievedPostByIdDto(s_posts[3]),
                     MapPostToRetrievedPostByIdDto(s_posts[1]),
@@ -232,7 +232,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
     [Theory]
     [MemberData(nameof(GetPostsAsyncWhenMultipleRecordsArePagedShouldReturnPagedRecordsTestData))]
     public async Task GetPostsAsync_WhenMultipleRecordsArePaged_ShouldReturnPagedRecords(
-        string paginationQuery,
+        string searchTerm,
         List<RetrievedPostByIdDto> expectedRetrievedPostByIdDtos)
     {
         // Arrange:
@@ -241,7 +241,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             await ApplicationDbContext.Posts.AddAsync(post);
             await ApplicationDbContext.SaveChangesAsync();
         }
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}?{paginationQuery}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}?{searchTerm}");
 
         // Act:
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
@@ -252,12 +252,12 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
 
     [Theory]
     [MemberData(nameof(GetPostsAsyncWhenValidSortByIsAppliedShouldReturnSortedRecordsData))]
-    public async Task GetPostsAsync_WhenValidSortByIsApplied_ShouldReturnSortedRecords(string sortQuery, List<RetrievedPostByIdDto> expectedRetrievedPostByIdDtos)
+    public async Task GetPostsAsync_WhenValidSortByIsApplied_ShouldReturnSortedRecords(string searchTerm, List<RetrievedPostByIdDto> expectedRetrievedPostByIdDtos)
     {
         // Arrange:
         await ApplicationDbContext.Posts.AddRangeAsync(s_posts);
         await ApplicationDbContext.SaveChangesAsync();
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}?{sortQuery}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}?{searchTerm}");
 
         // Act:
         HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(httpRequestMessage);
@@ -275,7 +275,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             statusCode: (int)HttpStatusCode.UnprocessableEntity);
         var expectedErrors = new List<string>
         {
-            $"Cannot sort by 'InvalidSortBy'. The valid options are: [{string.Join(", ", Enum.GetNames<SortByType>())}]."
+            $"Cannot sort by 'InvalidSortBy'. The valid options are: [{string.Join(", ", Enum.GetNames<SortPostsByType>())}]."
         };
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}?sortBy=InvalidSortBy");
 
@@ -290,13 +290,13 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
     [InlineData("Relevance")]
     [InlineData("RelevanceAsc")]
     [InlineData("Hot")]
-    public async Task GetPostsAsync_WhenSortingByRankWithoutQuery_ShouldReturnProblemHttpResult(string sortByType)
+    public async Task GetPostsAsync_WhenSortingByRankWithoutSearchTerm_ShouldReturnProblemHttpResult(string sortByType)
     {
         // Arrange:
         ProblemHttpResult expectedProblemHttpResult = TypedResults.Problem(
             title: "One or more validation errors occurred.",
             statusCode: (int)HttpStatusCode.UnprocessableEntity);
-        var expectedErrors = new List<string> { $"Cannot sort by '{sortByType}' without a search query." };
+        var expectedErrors = new List<string> { $"Cannot sort by '{sortByType}' without a search term." };
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Constants.BasePostEndpoint}?sortBy={sortByType}");
 
         // Act:
@@ -313,12 +313,7 @@ public sealed class GetPostsEndpointTests(IntegrationTestsWebApplicationFactory 
             post.Title.ToString(),
             post.Content!.ToString(),
             post.ImagePath,
-            [
-                .. post.PostReplies.Select(postReply => new RetrievedPostReplyForPostDto(
-                    postReply.Content.ToString(),
-                    postReply.ImagePath,
-                    postReply.CreatedAtUtc))
-            ],
+            $"http://localhost/api/posts/{post.Id}/replies",
             post.CreatedAtUtc,
             post.UpdatedAtUtc);
     }

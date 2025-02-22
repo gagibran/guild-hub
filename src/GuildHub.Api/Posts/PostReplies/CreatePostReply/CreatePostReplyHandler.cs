@@ -1,24 +1,26 @@
 namespace GuildHub.Api.Posts.PostReplies.CreatePostReply;
 
-public sealed class CreatePostReplyHandler(ApplicationDbContext applicationDbContext) : IRequestHandler<CreatePostReplyRequest>
+public sealed class CreatePostReplyHandler(ApplicationDbContext applicationDbContext, IMapHandler<PostReply, CreatedPostReplyDto> postReplyToCreatedPostReplyDtoMapper)
+    : IRequestHandler<CreatePostReplyRequest, CreatedPostReplyDto>
 {
     private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
+    private readonly IMapHandler<PostReply, CreatedPostReplyDto> _postReplyToCreatedPostReplyDtoMapper = postReplyToCreatedPostReplyDtoMapper;
 
-    public async Task<Result> HandleAsync(CreatePostReplyRequest createPostReplyDto, CancellationToken cancellationToken)
+    public async Task<Result<CreatedPostReplyDto>> HandleAsync(CreatePostReplyRequest createPostReplyRequest, CancellationToken cancellationToken)
     {
-        Post? retrievedPost = await _applicationDbContext.Posts.FindAsync(createPostReplyDto.PostId);
+        Post? retrievedPost = await _applicationDbContext.Posts.FindAsync(createPostReplyRequest.PostId);
         if (retrievedPost is null)
         {
-            return Result.Fail($"No post with the ID '{createPostReplyDto.PostId}' was found.");
+            return Result<CreatedPostReplyDto>.Fail($"No post with the ID '{createPostReplyRequest.PostId}' was found.");
         }
-        Result<PostReply> postReplyResult = PostReply.Build(retrievedPost, createPostReplyDto.Content, createPostReplyDto.ImagePath);
+        Result<PostReply> postReplyResult = PostReply.Build(retrievedPost, createPostReplyRequest.Content, createPostReplyRequest.ImagePath);
         if (!postReplyResult.IsSuccess)
         {
-            return Result.Fail(postReplyResult.Errors);
+            return Result<CreatedPostReplyDto>.Fail(postReplyResult.Errors);
         }
         retrievedPost.AddPostReply(postReplyResult.Value!);
         _applicationDbContext.PostReplies.Add(postReplyResult.Value!);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
-        return Result.Succeed();
+        return Result<CreatedPostReplyDto>.Succeed(_postReplyToCreatedPostReplyDtoMapper.Map(postReplyResult.Value!));
     }
 }

@@ -13,6 +13,7 @@ public class Program
 
     private static void AddServices(WebApplicationBuilder webApplicationBuilder)
     {
+        webApplicationBuilder.Services.AddHttpContextAccessor();
         webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>(dbContextOptionsBuilder =>
         {
             dbContextOptionsBuilder.UseNpgsql(webApplicationBuilder.Configuration.GetConnectionString("Application"));

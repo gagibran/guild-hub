@@ -3,17 +3,13 @@ namespace GuildHub.Api.Posts.GetPosts;
 public sealed class GetPostsEndpoint
 {
     public static async Task<Results<ProblemHttpResult, Ok<List<RetrievedPostByIdDto>>>> GetPostsAsync(
-        string? query,
-        int? currentPageIndex,
-        int? postsPerPage,
+        [AsParameters] QueryParameters queryParameters,
         IRequestDispatcher dispatcher,
         HttpContext httpContext,
-        string sortBy = "None",
         CancellationToken cancellationToken = default)
     {
-        var getPostsDto = new GetPostsDto(query, currentPageIndex, postsPerPage, sortBy);
-        Result<RetrievedPostsDto> retrievedPostsDtoResult = await dispatcher.DispatchRequestAsync<GetPostsDto, RetrievedPostsDto>(
-            getPostsDto,
+        Result<RetrievedPostsDto> retrievedPostsDtoResult = await dispatcher.DispatchRequestAsync<GetPostsRequest, RetrievedPostsDto>(
+            new GetPostsRequest(queryParameters),
             cancellationToken);
         if (!retrievedPostsDtoResult.IsSuccess)
         {

@@ -8,7 +8,9 @@ public sealed class GetPostByIdEndpoint
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        Result<RetrievedPostByIdDto> retrievedPostDtoResult = await dispatcher.DispatchRequestAsync<GetPostByIdDto, RetrievedPostByIdDto>(new GetPostByIdDto(id), cancellationToken);
+        Result<RetrievedPostByIdDto> retrievedPostDtoResult = await dispatcher.DispatchRequestAsync<GetPostByIdRequest, RetrievedPostByIdDto>(
+            new GetPostByIdRequest(id),
+            cancellationToken);
         if (!retrievedPostDtoResult.IsSuccess)
         {
             return ApiHelper.CreateProblemDetails(HttpStatusCode.NotFound, retrievedPostDtoResult.Errors, httpContext);

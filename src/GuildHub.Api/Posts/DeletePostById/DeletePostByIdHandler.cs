@@ -1,10 +1,10 @@
 namespace GuildHub.Api.Posts.DeletePostById;
 
-public sealed class DeletePostByIdHandler(ApplicationDbContext applicationDbContext) : IRequestHandler<DeletePostByIdDto>
+public sealed class DeletePostByIdHandler(ApplicationDbContext applicationDbContext) : IRequestHandler<DeletePostByIdRequest>
 {
     private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
 
-    public async Task<Result> HandleAsync(DeletePostByIdDto deletePostByIdDto, CancellationToken cancellationToken)
+    public async Task<Result> HandleAsync(DeletePostByIdRequest deletePostByIdDto, CancellationToken cancellationToken)
     {
         Post? retrievedPost = await _applicationDbContext.Posts.FindAsync(deletePostByIdDto.Id, cancellationToken);
         if (retrievedPost is null)

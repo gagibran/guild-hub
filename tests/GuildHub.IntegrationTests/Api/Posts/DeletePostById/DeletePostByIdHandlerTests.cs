@@ -5,11 +5,11 @@ namespace GuildHub.IntegrationTests.Api.Posts.DeletePostById;
 [Collection(nameof(SharedDatabaseFixture))]
 public sealed class DeletePostByIdHandlerTests : IntegrationTest
 {
-    private readonly IRequestHandler<DeletePostByIdDto> _deletePostByIdHandler;
+    private readonly IRequestHandler<DeletePostByIdRequest> _deletePostByIdHandler;
     public DeletePostByIdHandlerTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
         : base(integrationTestsWebApplicationFactory)
     {
-        _deletePostByIdHandler = ServiceProvider.GetRequiredService<IRequestHandler<DeletePostByIdDto>>();
+        _deletePostByIdHandler = ServiceProvider.GetRequiredService<IRequestHandler<DeletePostByIdRequest>>();
     }
 
     [Fact]

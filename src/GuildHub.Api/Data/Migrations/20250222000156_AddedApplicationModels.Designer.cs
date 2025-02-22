@@ -14,7 +14,7 @@ using NpgsqlTypes;
 namespace GuildHub.Api.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250105164143_AddedApplicationModels")]
+    [Migration("20250222000156_AddedApplicationModels")]
     partial class AddedApplicationModels
     {
         /// <inheritdoc />
@@ -87,6 +87,12 @@ namespace GuildHub.Api.Data.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
 
+                    b.Property<NpgsqlTsVector>("SearchTsVector")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasComputedColumnSql("to_tsvector('english', coalesce(\"Content\", ''))", true);
+
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("UpdatedAt");
@@ -104,6 +110,10 @@ namespace GuildHub.Api.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("SearchTsVector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchTsVector"), "GIN");
 
                     b.ToTable("PostReplies", (string)null);
                 });

@@ -5,12 +5,12 @@ namespace GuildHub.IntegrationTests.Api.Posts.CreatePost;
 [Collection(nameof(SharedDatabaseFixture))]
 public sealed class CreatePostHandlerTests : IntegrationTest
 {
-    private readonly IRequestHandler<CreatePostDto, CreatedPostDto> _createPostHandler;
+    private readonly IRequestHandler<CreatePostRequest, CreatedPostDto> _createPostHandler;
 
     public CreatePostHandlerTests(IntegrationTestsWebApplicationFactory integrationTestsWebApplicationFactory)
         : base(integrationTestsWebApplicationFactory)
     {
-        _createPostHandler = ServiceProvider.GetRequiredService<IRequestHandler<CreatePostDto, CreatedPostDto>>();
+        _createPostHandler = ServiceProvider.GetRequiredService<IRequestHandler<CreatePostRequest, CreatedPostDto>>();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public sealed class CreatePostHandlerTests : IntegrationTest
 
         // Act:
         Result<CreatedPostDto> actualResult = await _createPostHandler.HandleAsync(
-            new CreatePostDto(string.Empty, It.IsAny<string>(), It.IsAny<string>()),
+            new(string.Empty, It.IsAny<string>(), It.IsAny<string>()),
             It.IsAny<CancellationToken>());
 
         // Assert:
@@ -33,7 +33,7 @@ public sealed class CreatePostHandlerTests : IntegrationTest
     {
         // Act:
         Result<CreatedPostDto> actualResult = await _createPostHandler.HandleAsync(
-            new CreatePostDto("Title", "Content", "ImagePath"),
+            new("Title", "Content", "ImagePath"),
             It.IsAny<CancellationToken>());
 
         // Assert:

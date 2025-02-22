@@ -1,18 +1,22 @@
 namespace GuildHub.Api.Posts.GetPostById;
 
-public sealed class PostToRetrievedPostByIdDtoMapper(IMapDispatcher mapDispatcher) : IMapHandler<Post, RetrievedPostByIdDto>
+public sealed class PostToRetrievedPostByIdDtoMapper(IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+    : IMapHandler<Post, RetrievedPostByIdDto>
 {
-    private readonly IMapDispatcher _mapDispatcher = mapDispatcher;
+    private readonly LinkGenerator _linkGenerator = linkGenerator;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public RetrievedPostByIdDto Map(Post post)
     {
-        List<RetrievedPostReplyForPostDto> retrievedPostRepliesForPostDto = _mapDispatcher.DispatchMap<ICollection<PostReply>, List<RetrievedPostReplyForPostDto>>(post.PostReplies);
         return new RetrievedPostByIdDto(
             post.Id,
             post.Title.ToString(),
             post.Content?.ToString(),
             post.ImagePath,
-            retrievedPostRepliesForPostDto,
+            _linkGenerator.GetUriByName(
+                _httpContextAccessor.HttpContext!,
+                nameof(GetPostRepliesEndpoint.GetPostRepliesAsync),
+                new { postId = post.Id })!,
             post.CreatedAtUtc,
             post.UpdatedAtUtc);
     }

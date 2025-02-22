@@ -1,5 +1,3 @@
-using NpgsqlTypes;
-
 namespace GuildHub.Api.Posts;
 
 public sealed class Post : Entity

@@ -5,10 +5,12 @@ public static class CreatePostEndpoint
     public static async Task<Results<ProblemHttpResult, CreatedAtRoute<CreatedPostDto>>> CreatePostAsync(
         IRequestDispatcher dispatcher,
         HttpContext httpContext,
-        CreatePostDto createPostDto,
+        CreatePostRequest createPostRequest,
         CancellationToken cancellationToken = default)
     {
-        Result<CreatedPostDto> createdPostDtoResult = await dispatcher.DispatchRequestAsync<CreatePostDto, CreatedPostDto>(createPostDto, cancellationToken);
+        Result<CreatedPostDto> createdPostDtoResult = await dispatcher.DispatchRequestAsync<CreatePostRequest, CreatedPostDto>(
+            createPostRequest,
+            cancellationToken);
         if (!createdPostDtoResult.IsSuccess)
         {
             return ApiHelper.CreateProblemDetails(HttpStatusCode.UnprocessableEntity, createdPostDtoResult.Errors, httpContext);

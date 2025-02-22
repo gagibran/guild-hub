@@ -8,6 +8,12 @@ public sealed class PostReplyBuilder : IEntityTypeConfiguration<PostReply>
             .ToTable("PostReplies")
             .HasKey(postReply => postReply.Id);
         postReplyBuilder
+            .Property(postReply => postReply.SearchTsVector)
+            .HasComputedColumnSql("to_tsvector('english', coalesce(\"Content\", ''))", true);
+        postReplyBuilder
+            .HasIndex(postReply => postReply.SearchTsVector)
+            .HasMethod("GIN");
+        postReplyBuilder
             .ComplexProperty(postReply => postReply.Content)
             .Property(content => content.Message)
             .HasColumnName("Content")
