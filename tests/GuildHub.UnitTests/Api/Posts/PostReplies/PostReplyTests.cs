@@ -22,7 +22,11 @@ public sealed class PostReplyTests
     public void Build_WhenContentResultSucceeds_ShouldReturnSuccessfulResultWithPostReply()
     {
         // Act:
-        Result<PostReply> actualResult = PostReply.Build(It.IsAny<Post>(), "Content", It.IsAny<string?>());
+        Result<PostReply> actualResult = PostReply.Build(
+            Post.Build("Title", It.IsAny<string?>(),
+            It.IsAny<string?>()).Value!,
+            "Content",
+            It.IsAny<string?>());
 
         // Assert:
         actualResult.IsSuccess.Should().BeTrue();

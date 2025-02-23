@@ -72,36 +72,4 @@ public class PostTests
         post.ImagePath.Should().Be("New ImagePath");
         post.UpdatedAtUtc.Should().BeCloseTo(DateTime.UtcNow, new TimeSpan(0, 0, 1));
     }
-
-    [Fact]
-    public void AddPostReply_WhenReplyIsUnique_ShouldAddReply()
-    {
-        // Arrange:
-        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
-        PostReply postReply = PostReply.Build(post, "Content", "ImagePath").Value!;
-
-        // Act:
-        Result actualResult = post.AddPostReply(postReply);
-
-        // Assert:
-        actualResult.IsSuccess.Should().BeTrue();
-        post.PostReplies.Should().Contain(postReply);
-    }
-
-    [Fact]
-    public void AddPostReply_WhenReplyIsDuplicate_ShouldFail()
-    {
-        // Arrange:
-        Post post = Post.Build("Title", "Content", "ImagePath").Value!;
-        PostReply postReply = PostReply.Build(post, "Content", "ImagePath").Value!;
-        post.AddPostReply(postReply);
-
-        // Act:
-        Result actualResult = post.AddPostReply(postReply);
-
-        // Assert:
-        actualResult.IsSuccess.Should().BeFalse();
-        actualResult.Errors.Should().HaveCount(1);
-        actualResult.Errors[0].Should().Be($"The reply with ID {postReply.Id} has already been added to this post.");
-    }
 }

@@ -29,6 +29,8 @@ public sealed class PostReply : Entity
         {
             return Result<PostReply>.SetTypeToFailedResult(contentResult);
         }
-        return Result<PostReply>.Succeed(new PostReply(post, contentResult.Value!, imagePath));
+        var postReply = new PostReply(post, contentResult.Value!, imagePath);
+        post.PostReplies.Add(postReply);
+        return Result<PostReply>.Succeed(postReply);
     }
 }

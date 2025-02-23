@@ -18,7 +18,6 @@ public sealed class CreatePostReplyHandler(ApplicationDbContext applicationDbCon
         {
             return Result<CreatedPostReplyDto>.Fail(postReplyResult.Errors);
         }
-        retrievedPost.AddPostReply(postReplyResult.Value!);
         await _applicationDbContext.PostReplies.AddAsync(postReplyResult.Value!, cancellationToken);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
         return Result<CreatedPostReplyDto>.Succeed(_postReplyToCreatedPostReplyDtoMapper.Map(postReplyResult.Value!));

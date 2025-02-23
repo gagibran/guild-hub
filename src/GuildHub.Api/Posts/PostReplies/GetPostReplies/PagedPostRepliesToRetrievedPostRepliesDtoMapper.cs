@@ -6,7 +6,7 @@ public sealed class PagedPostRepliesToRetrievedPostRepliesDtoMapper : IMapHandle
     {
         return new RetrievedPostRepliesDto(
             [
-                .. pagedPostReplies.EntitiesInPage.Select(postReply => new RetrievedPostReplyDto(
+                .. pagedPostReplies.EntitiesInPage.Select(postReply => new RetrievedPostReplyByIdDto(
                     postReply.Id,
                     postReply.Content.ToString(),
                     postReply.ImagePath,

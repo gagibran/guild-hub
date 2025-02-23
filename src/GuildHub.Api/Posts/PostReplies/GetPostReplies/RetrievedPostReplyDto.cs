@@ -1,6 +1,6 @@
 namespace GuildHub.Api.Posts.PostReplies.GetPostReplies;
 
-public sealed record RetrievedPostReplyDto(
+public sealed record RetrievedPostReplyByIdDto(
     Guid Id,
     string Content,
     string? ImagePath,

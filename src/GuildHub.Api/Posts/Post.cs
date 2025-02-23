@@ -55,14 +55,4 @@ public sealed class Post : Entity
         UpdatedAtUtc = DateTime.UtcNow;
         return Result.Succeed();
     }
-
-    public Result AddPostReply(PostReply postReply)
-    {
-        if (_postReplies.Any(existingPostReply => existingPostReply == postReply))
-        {
-            return Result.Fail($"The reply with ID {postReply.Id} has already been added to this post.");
-        }
-        _postReplies.Add(postReply);
-        return Result.Succeed();
-    }
 }

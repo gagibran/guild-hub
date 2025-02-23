@@ -1,7 +1,7 @@
 namespace GuildHub.Api.Posts.PostReplies.GetPostReplies;
 
 public sealed record RetrievedPostRepliesDto(
-    List<RetrievedPostReplyDto> PostReplies,
+    List<RetrievedPostReplyByIdDto> PostReplies,
     int? CurrentPageIndex,
     int? RepliesPerPage,
     int RepliesCount,

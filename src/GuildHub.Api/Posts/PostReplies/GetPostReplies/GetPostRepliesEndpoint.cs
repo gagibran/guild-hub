@@ -2,7 +2,7 @@ namespace GuildHub.Api.Posts.PostReplies.GetPostReplies;
 
 public sealed class GetPostRepliesEndpoint
 {
-    public static async Task<Results<ProblemHttpResult, Ok<List<RetrievedPostReplyDto>>>> GetPostRepliesAsync(
+    public static async Task<Results<ProblemHttpResult, Ok<List<RetrievedPostReplyByIdDto>>>> GetPostRepliesAsync(
         Guid postId,
         [AsParameters] QueryParameters queryParameters,
         IRequestDispatcher dispatcher,
