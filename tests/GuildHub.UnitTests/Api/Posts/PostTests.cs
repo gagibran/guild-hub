@@ -6,7 +6,7 @@ public class PostTests
     public void Build_WhenTitleResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()
     {
         // Arrange:
-        Result<Post> expectedPostResult = Result<Post>.Fail("The title cannot be empty.");
+        Result<Post> expectedPostResult = Result<Post>.Fail("The title cannot be null nor empty.");
 
         // Act:
         Result<Post> actualPostResult = Post.Build("", "Content", "ImagePath");

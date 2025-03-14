@@ -9,18 +9,31 @@ public sealed class Title : ValueObject
         TitleName = titleName;
     }
 
+    public static Result<Title?> BuildNullable(string? titleName)
+    {
+        if (titleName is null)
+        {
+            return Result<Title?>.Succeed(null);
+        }
+        string trimmedTitle = titleName.Trim();
+        if (trimmedTitle == "")
+        {
+            return Result<Title?>.Fail("The title cannot be empty.");
+        }
+        if (trimmedTitle.Length > PostConstants.MaxTitleLength)
+        {
+            return Result<Title?>.Fail($"The title cannot have more than {PostConstants.MaxTitleLength} characters.");
+        }
+        return Result<Title?>.Succeed(new(trimmedTitle));
+    }
+
     public static Result<Title> Build(string titleName)
     {
-        string? trimmedTitleName = titleName?.Trim();
-        if (string.IsNullOrWhiteSpace(trimmedTitleName))
+        if (string.IsNullOrWhiteSpace(titleName))
         {
-            return Result<Title>.Fail("The title cannot be empty.");
+            return Result<Title>.Fail("The title cannot be null nor empty.");
         }
-        if (trimmedTitleName.Length > PostConstants.MaxTitleLength)
-        {
-            return Result<Title>.Fail($"The title cannot have more than {PostConstants.MaxTitleLength} characters.");
-        }
-        return Result<Title>.Succeed(new Title(trimmedTitleName));
+        return BuildNullable(titleName)!;
     }
 
     public override IEnumerable<object> GetEqualityComponents()

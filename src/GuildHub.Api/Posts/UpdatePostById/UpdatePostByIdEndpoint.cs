@@ -9,9 +9,7 @@ public sealed class UpdatePostByIdEndpoint
         UpdatePostByIdDto updatePostByIdDto,
         CancellationToken cancellationToken = default)
     {
-        Result updatePostByIdResult = await dispatcher.DispatchRequestAsync(
-            new UpdatePostByIdRequest(id, updatePostByIdDto.Title, updatePostByIdDto.Content, updatePostByIdDto.ImagePath),
-            cancellationToken);
+        Result updatePostByIdResult = await dispatcher.DispatchRequestAsync(new UpdatePostByIdRequest(id, updatePostByIdDto), cancellationToken);
         if (updatePostByIdResult.IsSuccess)
         {
             return TypedResults.NoContent();

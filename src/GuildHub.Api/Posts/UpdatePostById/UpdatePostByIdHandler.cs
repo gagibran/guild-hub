@@ -12,9 +12,9 @@ public sealed class UpdatePostByIdHandler(ApplicationDbContext applicationDbCont
             return Result.Fail($"No post with the ID '{updatePostByIdRequest.Id}' was found.");
         }
         Result updatePostResult = retrievedPost.Update(
-            updatePostByIdRequest.Title,
-            updatePostByIdRequest.Content,
-            updatePostByIdRequest.ImagePath);
+            updatePostByIdRequest.UpdatePostByIdDto.Title,
+            updatePostByIdRequest.UpdatePostByIdDto.Content,
+            updatePostByIdRequest.UpdatePostByIdDto.ImagePath);
         if (!updatePostResult.IsSuccess)
         {
             return updatePostResult;

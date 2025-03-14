@@ -40,18 +40,22 @@ public sealed class Post : Entity
         return Result<Post>.Succeed(new Post(titleResult.Value!, contentResult.Value, imagePath));
     }
 
-    public Result Update(string title, string? content, string? imagePath)
+    public Result Update(string? title, string? content, string? imagePath)
     {
-        Result<Title> titleResult = Title.Build(title);
+        if (title is null && content is null && imagePath is null)
+        {
+            return Result.Fail($"At least one of the following must be provided: {nameof(title)}, {nameof(content)}, or {nameof(imagePath)}.");
+        }
+        Result<Title?> titleResult = Title.BuildNullable(title);
         Result<Content?> contentResult = Content.BuildNullable(content);
         Result combinedResult = Result.Combine(titleResult, contentResult);
         if (!combinedResult.IsSuccess)
         {
             return combinedResult;
         }
-        Title = titleResult.Value!;
-        Content = contentResult.Value;
-        ImagePath = imagePath;
+        Title = titleResult.Value ?? Title;
+        Content = contentResult.Value ?? Content;
+        ImagePath = imagePath ?? ImagePath;
         UpdatedAtUtc = DateTime.UtcNow;
         return Result.Succeed();
     }

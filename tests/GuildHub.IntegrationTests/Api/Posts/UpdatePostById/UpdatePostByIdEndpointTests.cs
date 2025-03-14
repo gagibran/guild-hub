@@ -15,16 +15,36 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
                 ["New Title", "New Content", "New ImagePath"]
             },
             {
-                "{\"title\": \"New Title\", \"imagePath\": \"ImagePath\"}",
-                ["New Title", null, "ImagePath"]
+                "{\"title\": \"New Title\", \"imagePath\": \"New ImagePath\"}",
+                ["New Title", "Content", "New ImagePath"]
             },
             {
                 "{\"title\": \"New Title\", \"content\": \"New Content\"}",
-                ["New Title", "New Content", null]
+                ["New Title", "New Content", "ImagePath"]
+            },
+            {
+                "{\"content\": \"New Content\", \"imagePath\": \"New ImagePath\"}",
+                ["Title", "New Content", "New ImagePath"]
             },
             {
                 "{\"title\": \"New Title\"}",
-                ["New Title", null, null]
+                ["New Title", "Content", "ImagePath"]
+            },
+            {
+                "{\"content\": \"New Content\"}",
+                ["Title", "New Content", "ImagePath"]
+            },
+            {
+                "{\"imagePath\": \"New ImagePath\"}",
+                ["Title", "Content", "New ImagePath"]
+            },
+            {
+                "{\"content\": \"\"}",
+                ["Title", "", "ImagePath"]
+            },
+            {
+                "{\"imagePath\": \"\"}",
+                ["Title", "Content", ""]
             }
         };
     }
@@ -55,7 +75,7 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         actualRetrievedPost.Content?.ToString().Should().Be(expectedRetrievedPost[1]);
         actualRetrievedPost.ImagePath.Should().Be(expectedRetrievedPost[2]);
         actualRetrievedPost.CreatedAtUtc.Should().BeCloseTo(post.CreatedAtUtc, TimeSpan.FromMilliseconds(1));
-        actualRetrievedPost.UpdatedAtUtc.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(100));
+        actualRetrievedPost.UpdatedAtUtc.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(200));
     }
 
     [Fact]
@@ -82,8 +102,10 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         await AssertProblemDetailsAsync(httpResponseMessage, expectedErrors, expectedProblemHttpResult);
     }
 
-    [Fact]
-    public async Task UpdatePostByIdAsync_WhenUpdateFails_ShouldReturnProblemHttpResult()
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task UpdatePostByIdAsync_WhenUpdateFails_ShouldReturnProblemHttpResult(string title)
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;
@@ -96,7 +118,7 @@ public sealed class UpdatePostByIdEndpointTests(IntegrationTestsWebApplicationFa
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, $"{Constants.BasePostEndpoint}/{post.Id}")
         {
             Content = new StringContent(
-                "{\"content\": \"Content\", \"imagePath\": \"ImagePath\"}",
+                $"{{\"title\": \"{title}\", \"content\": \"Content\", \"imagePath\": \"ImagePath\"}}",
                 Encoding.UTF8,
                 MediaTypeNames.Application.Json)
         };

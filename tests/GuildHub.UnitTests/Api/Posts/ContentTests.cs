@@ -15,14 +15,11 @@ public sealed class ContentTests
         };
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("  ")]
-    [InlineData(null)]
-    public void BuildNullable_WhenContentIsNullOrWhitespace_ShouldReturnSuccessfulResultWithNullContent(string? content)
+    [Fact]
+    public void BuildNullable_WhenContentIsNull_ShouldReturnSuccessfulResultWithNullContent()
     {
         // Act:
-        Result<Content?> actualResult = Content.BuildNullable(content);
+        Result<Content?> actualResult = Content.BuildNullable(null);
 
         // Assert:
         actualResult.IsSuccess.Should().BeTrue();

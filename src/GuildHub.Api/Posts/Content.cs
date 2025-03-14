@@ -11,7 +11,7 @@ public sealed class Content : ValueObject
 
     public static Result<Content?> BuildNullable(string? content)
     {
-        if (string.IsNullOrWhiteSpace(content))
+        if (content is null)
         {
             return Result<Content?>.Succeed(null);
         }
@@ -20,7 +20,7 @@ public sealed class Content : ValueObject
         {
             return Result<Content?>.Fail($"The content message cannot have more than {Constants.MaxContentMessageLength} characters.");
         }
-        return Result<Content?>.Succeed(new Content(trimmedContent));
+        return Result<Content?>.Succeed(new(trimmedContent));
     }
 
     public static Result<Content> Build(string content)

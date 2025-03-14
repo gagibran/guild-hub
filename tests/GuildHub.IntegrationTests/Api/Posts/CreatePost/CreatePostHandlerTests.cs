@@ -15,7 +15,7 @@ public sealed class CreatePostHandlerTests : IntegrationTest
     public async Task HandleAsync_WhenPostResultFails_ShouldReturnFailedResult()
     {
         // Arrange:
-        Result<CreatedPostDto> expectedResult = Result<CreatedPostDto>.Fail("The title cannot be empty.");
+        Result<CreatedPostDto> expectedResult = Result<CreatedPostDto>.Fail("The title cannot be null nor empty.");
 
         // Act:
         Result<CreatedPostDto> actualResult = await _createPostHandler.HandleAsync(

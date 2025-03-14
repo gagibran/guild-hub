@@ -11,7 +11,7 @@ public sealed class CreatePostEndpointTests(IntegrationTestsWebApplicationFactor
         ProblemHttpResult expectedProblemHttpResult = TypedResults.Problem(
             title: "One or more validation errors occurred.",
             statusCode: (int)HttpStatusCode.UnprocessableEntity);
-        var expectedErrors = new List<string> { "The title cannot be empty." };
+        var expectedErrors = new List<string> { "The title cannot be null nor empty." };
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, Constants.BasePostEndpoint)
         {
             Content = new StringContent(
