@@ -10,7 +10,7 @@ public sealed class GetPostRepliesEndpoint
         CancellationToken cancellationToken = default)
     {
         Result<RetrievedPostRepliesDto> retrievedPostRepliesDtoResult = await dispatcher.DispatchRequestAsync<GetPostRepliesRequest, RetrievedPostRepliesDto>(
-            new GetPostRepliesRequest(postId, queryParameters),
+            new(postId, queryParameters),
             cancellationToken);
         if (retrievedPostRepliesDtoResult.IsSuccess)
         {
