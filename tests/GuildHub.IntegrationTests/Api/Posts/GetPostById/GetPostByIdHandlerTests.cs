@@ -50,6 +50,12 @@ public sealed class GetPostByIdHandlerTests : IntegrationTest
         Result<RetrievedPostByIdDto> actualResult = await _getPostByIdHandler.HandleAsync(new(post.Id), It.IsAny<CancellationToken>());
 
         // Assert:
-        actualResult.Should().BeEquivalentTo(expectedResult);
+        actualResult
+            .Should()
+            .BeEquivalentTo(expectedResult, options => options
+                .Using<DateTime>(assertionContext => assertionContext.Subject
+                    .Should()
+                    .BeCloseTo(assertionContext.Expectation, TimeSpan.FromMilliseconds(1)))
+                .When(dto => dto.Path.EndsWith("CreatedAtUtc") || dto.Path.EndsWith("UpdatedAtUtc")));
     }
 }

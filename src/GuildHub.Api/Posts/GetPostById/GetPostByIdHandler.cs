@@ -7,7 +7,9 @@ public sealed class GetPostByIdHandler(ApplicationDbContext applicationDbContext
 
     public async Task<Result<RetrievedPostByIdDto>> HandleAsync(GetPostByIdRequest getPostByIdRequest, CancellationToken cancellationToken)
     {
-        Post? retrievedPost = await _applicationDbContext.Posts.FindAsync(getPostByIdRequest.Id, cancellationToken);
+        Post? retrievedPost = await _applicationDbContext.Posts
+            .AsNoTracking()
+            .SingleOrDefaultAsync(post => post.Id == getPostByIdRequest.Id, cancellationToken);
         if (retrievedPost is null)
         {
             return Result<RetrievedPostByIdDto>.Fail($"No post with the ID '{getPostByIdRequest.Id}' was found.");

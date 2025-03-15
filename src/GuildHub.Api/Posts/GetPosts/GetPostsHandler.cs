@@ -21,7 +21,8 @@ public sealed class GetPostsHandler(ApplicationDbContext applicationDbContext, I
         {
             posts = posts
                 .Where(post => post.SearchTsVector.Matches(EF.Functions.PhraseToTsQuery("english", search!)))
-                .Select(post => post);
+                .Select(post => post)
+                .AsNoTracking();
         }
         if (!isSearchValid
             && (sortPostsByType == SortPostsByType.Relevance || sortPostsByType == SortPostsByType.RelevanceAsc || sortPostsByType == SortPostsByType.Hot))

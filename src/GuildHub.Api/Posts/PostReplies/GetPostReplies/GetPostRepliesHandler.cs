@@ -16,7 +16,8 @@ public sealed class GetPostRepliesHandler(ApplicationDbContext applicationDbCont
         string? search = getPostRepliesRequest.QueryParameters.Search;
         IQueryable<PostReply> postReplies = _applicationDbContext.PostReplies
             .Where(postReply => postReply.Post == post)
-            .Select(postReply => postReply);
+            .Select(postReply => postReply)
+            .AsNoTracking();
         if (!string.IsNullOrWhiteSpace(search))
         {
             postReplies = postReplies

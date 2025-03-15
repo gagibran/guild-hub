@@ -108,7 +108,13 @@ public sealed class GetPostRepliesHandlerTests : IntegrationTest
             It.IsAny<CancellationToken>());
 
         // Assert:
-        actualResult.Should().BeEquivalentTo(expectedResult);
+        actualResult
+            .Should()
+            .BeEquivalentTo(expectedResult, options => options
+                .Using<DateTime>(assertionContext => assertionContext.Subject
+                    .Should()
+                    .BeCloseTo(assertionContext.Expectation, TimeSpan.FromMilliseconds(1)))
+                .When(dto => dto.Path.EndsWith("CreatedAtUtc") || dto.Path.EndsWith("UpdatedAtUtc")));
     }
 
     [Fact]
@@ -155,7 +161,13 @@ public sealed class GetPostRepliesHandlerTests : IntegrationTest
             It.IsAny<CancellationToken>());
 
         // Assert:
-        actualResult.Should().BeEquivalentTo(expectedResult);
+        actualResult
+            .Should()
+            .BeEquivalentTo(expectedResult, options => options
+                .Using<DateTime>(assertionContext => assertionContext.Subject
+                    .Should()
+                    .BeCloseTo(assertionContext.Expectation, TimeSpan.FromMilliseconds(1)))
+                .When(dto => dto.Path.EndsWith("CreatedAtUtc") || dto.Path.EndsWith("UpdatedAtUtc")));
     }
 
     private static RetrievedPostReplyByIdDto MapPostReplyToRetrievedPostReplyByIdDto(PostReply postReply)
