@@ -1,4 +1,3 @@
-using GuildHub.Api.Posts.PostReplies;
 using GuildHub.Api.Posts.PostReplies.UpdatePostReplyById;
 
 namespace GuildHub.IntegrationTests.Api.Posts.PostReplies.UpdatePostReplyById;
@@ -68,7 +67,7 @@ public sealed class UpdatePostReplyByIdHandlerTests : IntegrationTest
     [InlineData("NewContent", "NewImagePath")]
     [InlineData("NewContent", null)]
     [InlineData(null, "NewImagePath")]
-    public async Task HandleAsync_WhenUpdatePostReplyResultIsSuccessful_ShouldReturnSucceedResult(string? newContent, string? newImagePath)
+    public async Task HandleAsync_WhenUpdatePostReplyResultIsSuccessful_ShouldReturnSuccessfulResult(string? newContent, string? newImagePath)
     {
         // Arrange:
         Post post = Post.Build("Title", "Content", "ImagePath").Value!;

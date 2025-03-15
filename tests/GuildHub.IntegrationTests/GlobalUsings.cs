@@ -16,3 +16,4 @@ global using GuildHub.Common.ResultHandler;
 global using GuildHub.Api.Posts;
 global using GuildHub.Api.Posts.GetPostById;
 global using GuildHub.Api.Posts.CreatePost;
+global using GuildHub.Api.Posts.PostReplies;

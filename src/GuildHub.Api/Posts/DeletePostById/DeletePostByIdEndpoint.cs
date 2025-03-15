@@ -8,10 +8,10 @@ public sealed class DeletePostByIdEndpoint
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        Result retrievedPostDtoResult = await dispatcher.DispatchRequestAsync(new DeletePostByIdRequest(id), cancellationToken);
-        if (!retrievedPostDtoResult.IsSuccess)
+        Result deletePostByIdResult = await dispatcher.DispatchRequestAsync(new DeletePostByIdRequest(id), cancellationToken);
+        if (!deletePostByIdResult.IsSuccess)
         {
-            return ApiHelper.CreateProblemDetails(HttpStatusCode.NotFound, retrievedPostDtoResult.Errors, httpContext);
+            return ApiHelper.CreateProblemDetails(HttpStatusCode.NotFound, deletePostByIdResult.Errors, httpContext);
         }
         return TypedResults.NoContent();
     }
