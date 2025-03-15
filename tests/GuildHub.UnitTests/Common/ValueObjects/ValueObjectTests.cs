@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Common.ValueObjects;
 
-public class ValueObjectTests
+public sealed class ValueObjectTests
 {
     public static TheoryData<TestableValueObject?, TestableValueObject?> OperatorEqualsWhenOneOfTheObjectsIsNullShouldReturnFalseTestData()
     {

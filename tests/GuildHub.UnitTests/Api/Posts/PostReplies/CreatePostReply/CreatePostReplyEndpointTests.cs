@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Api.Posts.PostReplies.CreatePostReply;
 
-public class CreatePostReplyEndpointTests
+public sealed class CreatePostReplyEndpointTests
 {
     private readonly Mock<IRequestDispatcher> _requestDispatcherMock;
 

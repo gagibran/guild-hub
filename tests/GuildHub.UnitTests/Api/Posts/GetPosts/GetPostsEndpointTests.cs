@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Api.Posts.GetPosts;
 
-public class GetPostsEndpointTests
+public sealed class GetPostsEndpointTests
 {
     private readonly Mock<IRequestDispatcher> _requestDispatcherMock;
 

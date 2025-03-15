@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Api.Posts;
 
-public class PostTests
+public sealed class PostTests
 {
     [Fact]
     public void Build_WhenTitleResultIsUnsuccessful_ShouldReturnFailureWithErrorMessage()

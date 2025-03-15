@@ -1,5 +1,5 @@
 namespace GuildHub.UnitTests.Common;
 
-public class TestableEntity : Entity
+public sealed class TestableEntity : Entity
 {
 }

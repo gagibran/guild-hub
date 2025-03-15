@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Common.ResultHandler;
 
-public class Result_1Tests
+public sealed class Result_1Tests
 {
 
     [Fact]

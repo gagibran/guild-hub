@@ -1,6 +1,6 @@
 namespace GuildHub.UnitTests.Common;
 
-public class EntityTests
+public sealed class EntityTests
 {
     public static TheoryData<TestableEntity?, TestableEntity?> OperatorEqualsWhenOneOfTheEntitiesIsNullShouldReturnFalseTestData()
     {
