@@ -10,4 +10,8 @@
   <ItemGroup>
     <ProjectReference Include="..\GuildHub.Common\GuildHub.Common.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Posts\PostReplies\UpdatePostReplyById\" />
+  </ItemGroup>
 </Project>

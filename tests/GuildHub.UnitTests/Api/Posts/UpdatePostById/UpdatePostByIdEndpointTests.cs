@@ -22,7 +22,7 @@ public sealed class UpdatePostByIdEndpointTests
             _requestDispatcherMock.Object,
             It.IsAny<HttpContext>(),
             It.IsAny<Guid>(),
-            new(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<string?>()),
+            It.IsAny<UpdatePostByIdDto>(),
             It.IsAny<CancellationToken>());
 
         // Assert:
@@ -57,7 +57,7 @@ public sealed class UpdatePostByIdEndpointTests
             _requestDispatcherMock.Object,
             defaultHttpContext,
             id,
-            new(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<string?>()),
+            It.IsAny<UpdatePostByIdDto>(),
             It.IsAny<CancellationToken>());
 
         // Assert:
@@ -91,7 +91,7 @@ public sealed class UpdatePostByIdEndpointTests
             _requestDispatcherMock.Object,
             defaultHttpContext,
             It.IsAny<Guid>(),
-            new(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<string?>()),
+            It.IsAny<UpdatePostByIdDto>(),
             It.IsAny<CancellationToken>());
 
         // Assert:
